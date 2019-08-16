@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<title>{% block title %}{% endblock %}</title>
+
+<link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet">
+<style>
+    .baby_nav_foot{float:left;width:20%;text-align: center}
+</style>
+<style>
+{% block style %}{% endblock %}
+</style>
+<script src="{{ url_for('static', filename='js/jquery-2.1.1.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+
+
+
+<body class="bg-info">
+<div class="container">
+    <div class="navbar navbar-fixed-top bg-info text-center">
+        <div style="width: 100%;margin: auto;">
+        <h4>{% block pageName %}{% endblock %}</h4>
+        </div>
+
+    </div>
+    {% block content %}{% endblock %}
+    <div class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+        <div style="width: 100%;margin: auto;">
+            <div class="baby_nav_foot">
+                <a class="btn btn-block btn-lg"
+                   href="{{ url_for('baby.diary') }}">日记</a>
+            </div>
+            <div class="baby_nav_foot">
+                <a class="btn btn-block btn-lg"
+                   href="{{ url_for('baby.album') }}">相册</a>
+            </div>
+            <div class="baby_nav_foot">
+                <a class="btn btn-block btn-lg"
+                   href="{{ url_for('baby.home') }}">主页</a>
+            </div>
+            <div class="baby_nav_foot">
+                <a class="btn btn-block btn-lg"
+                   href="{{ url_for('baby.footprint') }}">足迹</a>
+            </div>
+            <div class="baby_nav_foot">
+                <a class="btn btn-block btn-lg"
+                   href="{{ url_for('baby.mine') }}">我的</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>

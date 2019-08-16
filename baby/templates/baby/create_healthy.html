@@ -1,0 +1,45 @@
+{% extends 'base_baby.html' %}
+
+<h1>{% block title %}我的{% endblock %}</h1>
+{% block style %}
+.ele-center{text-align:center}
+{% endblock %}
+{% block pageName %}健康管理{% endblock %}
+{% block content %}
+<div class="row clearfix bg-primary img-rounded" style="margin:50px 10px 15px">
+    <form role="form" class="form-block" id="loginForm" action="{{ url_for('baby.add_baby_healthy') }}" method="post">
+        <div class="form-group">
+            <label for="record_date"></label>
+            <input type="text" class="form-control input-lg"
+                   placeholder="请输入日期，例如：2019-07-11" name="record_date"
+                   id="record_date" value="{{ request.form['record_date'] }}" required/>
+        </div>
+        <div class="form-group">
+            <label for="my_weight"></label>
+            <input type="text" class="form-control input-lg"
+                   placeholder="请输入体重，单位kg" name="my_weight"
+                   id="my_weight" value="{{ request.form['my_weight'] }}" required/>
+        </div>
+        <div class="form-group">
+            <label for="my_height"></label>
+            <input type="text" class="form-control input-lg"
+                   placeholder="请输入身高，单位cm" name="my_height"
+                   id="my_height" value="{{ request.form['my_height'] }}" required/>
+        </div>
+        <div class="form-group">
+            <label for="remarks"></label>
+            <input type="text" class="form-control input-lg"
+                   placeholder="请输入备注信息" name="remarks"
+                   id="remarks" value="{{ request.form['remarks'] }}" required/>
+        </div>
+        <div  class="form-group" >
+            <label></label>
+            <button type="submit" class="btn btn-block btn-lg">提交</button>
+            <a href="{{ url_for('baby.mine') }}">
+                <button type="button" class="btn btn-block btn-lg">取消</button></a>
+
+        </div>
+
+    </form>
+</div>
+{% endblock %}

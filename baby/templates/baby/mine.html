@@ -1,0 +1,118 @@
+{% extends 'base_baby.html' %}
+
+<h1>{% block title %}我的{% endblock %}</h1>
+{% block style %}
+.ele-center{text-align:center}
+{% endblock %}
+{% block pageName %}信息管理{% endblock %}
+{% block content %}
+<div class="row clearfix bg-primary img-rounded" style="margin:50px 10px 15px">
+    <div class="col-xs-4" style="margin:10px 0 10px">
+        <img style="weight:100px;height:100px" src="../static/img/s3.jpg" class="img-circle" />
+    </div>
+    <div class="col-xs-8" style="margin:10px 0 10px">
+        <h2>
+            {{user.name}}
+        </h2>
+        <p>{{user.address}}</p>
+    </div>
+</div>
+<div class="row clearfix bg-primary img-rounded" style="margin:10px 10px 15px;height:auto">
+
+    {% for baby in baby_info %}
+    <div class="text-center">
+    <p style="font-size:16px;">宝宝姓名: &nbsp;
+        <span style="color:#FF00CC">{{ baby['baby_name'] }}</span>
+        &nbsp;||&nbsp;生日: &nbsp;
+        <span style="color:#FF00CC">{{ baby['birthday'] }}</span></p>
+    </div>
+    {% endfor %}
+
+    <div class="col-xs-6 ele-center" style="margin:10px 0 10px">
+        <a href="{{url_for('baby.add_baby_info')}}">
+            <button type="button" class="btn btn-lg">添加信息</button></a>
+    </div>
+    <div class="col-xs-6 ele-center" style="margin:10px 0 10px">
+        <a href="#">
+            <button type="button" class="btn btn-lg">修改信息</button></a>
+    </div>
+</div>
+<div class="row clearfix bg-primary img-rounded" style="margin:10px 10px 15px;height:auto">
+    <div class="col-xs-6 ele-center" style="margin:10px 0 10px">
+        <a href="{{url_for('baby.add_baby_healthy')}}">
+            <button type="button" class="btn btn-lg">添加记录</button></a>
+    </div>
+    <div class="col-xs-6 ele-center" style="margin:10px 0 10px">
+        <a href="#">
+            <button type="button" class="btn btn-lg">健康管理</button></a>
+    </div>
+</div>
+<div class="row clearfix bg-primary img-rounded" style="margin:10px 10px 15px;height:auto">
+    <div class="col-xs-6 ele-center" style="margin:10px 0 10px">
+        <a href="{{url_for('baby.add_baby_diary')}}">
+            <button type="button" class="btn btn-lg">添加日志</button></a>
+    </div>
+    <div class="col-xs-6 ele-center" style="margin:10px 0 10px">
+        <a href="#">
+            <button type="button" class="btn btn-lg">管理日志</button></a>
+    </div>
+</div>
+<div class="row clearfix bg-primary img-rounded" style="margin:10px 10px 15px;height:auto">
+    <div class="col-xs-6 ele-center" style="margin:10px 0 10px">
+        <button type="button" class="btn btn-lg"
+                data-toggle="modal" data-target="#addFootprint">创建足迹</button>
+    </div>
+    <div class="col-xs-6 ele-center" style="margin:10px 0 10px">
+        <a href="#">
+            <button type="button" class="btn btn-lg">上传照片</button></a>
+    </div>
+</div>
+<div class="row clearfix bg-primary img-rounded" style="margin:10px 10px 15px;height:auto">
+    <div class="col-xs-12 ele-center" style="margin:10px 0 10px">
+        <a href="{{url_for('auth.logout')}}">
+            <button type="button" class="btn btn-lg btn-block">退出</button></a>
+    </div>
+</div>
+</div>
+
+<div class="modal fade text-center" id="addFootprint" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">新增足迹</h4>
+            </div>
+            <form role="form" class="form-block" id="loginForm"
+                  action="{{ url_for('baby.add_footprint') }}"
+                  method="post" style="margin:10px 10px 10px">
+                <div class="form-group">
+                    <label for="record_date"></label>
+                    <input type="text" class="form-control input-lg"
+                           placeholder="请输入年份月份，例如：201907" name="record_date"
+                           id="record_date" value="{{ request.form['record_date'] }}" required/>
+                </div>
+                <div class="form-group">
+                    <label for="footprint_name"></label>
+                    <input type="text" class="form-control input-lg"
+                           placeholder="请输入足迹名称" name="footprint_name"
+                           id="footprint_name" value="{{ request.form['footprint_name'] }}" required/>
+                </div>
+
+                <div class="form-group">
+                    <label for="footprint_desc"></label>
+                    <input type="text" class="form-control input-lg"
+                           placeholder="请输入足迹描述" name="footprint_desc"
+                           id="footprint_desc" value="{{ request.form['footprint_desc'] }}"/>
+                </div>
+                <div  class="form-group" >
+                    <label></label>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="submit" class="btn btn-primary">提交</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+{% endblock %}

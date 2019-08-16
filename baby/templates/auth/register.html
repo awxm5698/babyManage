@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+<h1>{% block title %}注册{% endblock %}</h1>
+
+{% block content %}
+<body style="height:100%">
+<div style="margin:20px 20px 0px">
+    <a href="{{ url_for('auth.login') }}"
+       class="fa fa-reply fa-lg" aria-hidden="true">&nbsp; 返回</a>
+</div>
+
+<div class="container" style="text-align:center">
+    <div style="margin:10px 10px 20px">
+        <div class="carousel-inner"  style="max-height:100px">
+            <div class="item active" id="login-logo">
+                <img  alt="" src="../static/img/610x610-01.jpg" />
+            </div>
+        </div>
+    </div>
+    <div>
+        {% for message in get_flashed_messages() %}
+        <div class="flash text-danger">{{ message }}</div>
+        {% endfor %}
+    </div>
+    <div style="margin:20px 15px 50px">
+        <form role="form" class="form-block" id="loginForm" action="{{ url_for('auth.register') }}" method="post">
+            <div class="form-group">
+                <label for="username"></label>
+                <input type="text" class="form-control input-lg"
+                       placeholder="请输入账号" name="username"
+                       id="username" value="{{ request.form['username'] }}" required/>
+            </div>
+            <div class="form-group">
+                <label for="email"></label>
+                <input type="email" class="form-control input-lg"
+                       placeholder="请输入邮箱" name="email"
+                       id="email" value="{{ request.form['email'] }}" required/>
+            </div>
+            <div class="form-group">
+                <label for="password"></label>
+                <input type="password" class="form-control input-lg"
+                       placeholder="请输入密码" name="password"
+                       id="password" value="{{ request.form['password'] }}" required/>
+            </div>
+            <div class="form-group">
+                <label for="password1"></label>
+                <input type="password" class="form-control input-lg"
+                       placeholder="请再次输入密码" name="password1"
+                       id="password1" value="" required/>
+            </div>
+            <div></div>
+            <div  class="form-group" >
+                <label></label>
+                <button type="submit" class="btn btn-block btn-lg">立即注册</button>
+            </div>
+
+        </form>
+    </div>
+
+    <div class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+        <span class="nav-link" href="#">@2019</span>
+        <a class="nav-link" href="#">宝贝计划</a>
+    </div>
+
+</div>
+<script>
+        window.onload = function () {
+            document.getElementById("password").onchange = validatePassword;
+            document.getElementById("password1").onchange = validatePassword;
+        }
+
+        function validatePassword() {
+            var pass1 = document.getElementById("password1").value;
+            var pass = document.getElementById("password").value;
+            if (pass1 != pass)
+                document.getElementById("password1").setCustomValidity("Passwords Don't Match");
+            else
+                document.getElementById("password1").setCustomValidity('');
+            //empty string means no validation error
+        }
+    </script>
+</body>
+{% endblock %}

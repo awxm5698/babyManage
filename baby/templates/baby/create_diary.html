@@ -1,0 +1,33 @@
+{% extends 'base_baby.html' %}
+
+<h1>{% block title %}我的{% endblock %}</h1>
+{% block style %}
+.ele-center{text-align:center}
+{% endblock %}
+{% block pageName %}创建日记{% endblock %}
+{% block content %}
+<div class="row clearfix bg-primary img-rounded" style="margin:50px 10px 15px">
+    <form role="form" class="form-block" id="loginForm" action="{{ url_for('baby.add_baby_diary') }}" method="post">
+        <div class="form-group">
+            <label for="record_date"></label>
+            <input type="text" class="form-control input-lg"
+                   placeholder="请输入日期，例如：2019-07-11" name="record_date"
+                   id="record_date" value="{{ request.form['record_date'] }}" required/>
+        </div>
+        <div class="form-group">
+            <label for="diary"></label>
+            <textarea type="text" class="form-control input-lg"
+                      placeholder="请输入日志内容,30字以内" name="diary"
+                      id="diary" value="{{ request.form['diary'] }}" ></textarea>
+        </div>
+        <div  class="form-group" >
+            <label></label>
+            <button type="submit" class="btn btn-block btn-lg">提交</button>
+            <a href="{{ url_for('baby.mine') }}">
+                <button type="button" class="btn btn-block btn-lg">取消</button></a>
+
+        </div>
+
+    </form>
+</div>
+{% endblock %}

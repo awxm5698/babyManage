@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+<h1>{% block title %}登录{% endblock %}</h1>
+
+{% block content %}
+<body style="height:100%">
+<div class="container" style="text-align:center">
+    <div style="margin:50px 10px 20px">
+        <div class="carousel-inner"  style="max-height:200px">
+            <div class="item active" id="login-logo">
+                <img  alt="" src="../static/img/610x610-03.jpg" />
+            </div>
+        </div>
+    </div>
+    <div style="margin:20px 15px 50px">
+            <form role="form" class="form-block" id="loginForm" action="{{ url_for('auth.login') }}" method="post">
+                <div class="form-group">
+                    <label for="username"></label>
+                    <input type="text" class="form-control input-lg"
+                           placeholder="请输入账号" name="username"
+                           id="username" value="{{ request.form['username'] }}" required/>
+                </div>
+                <div class="form-group">
+                    <label for="password"></label>
+                    <input type="password" class="form-control input-lg"
+                           placeholder="请输入密码" name="password"
+                           id="password" value="{{ request.form['password'] }}" required/>
+                </div>
+                <div  class="form-group" >
+                    <label style="float:right">
+                        <a href="#">
+                            <span class="fa fa-exclamation-circle"></span>忘记密码</a>
+                    </label>
+                    <button type="submit" class="btn btn-block btn-lg">登录</button>
+                </div>
+
+            </form>
+    </div>
+    <div  style="margin:20px 15px 50px;text-align:center">
+        <a href="{{url_for('auth.register')}}">
+            <button type="button" class="btn btn-default btn-lg">立即注册</button></a>
+
+    </div>
+
+    <div class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+        <span class="nav-link" href="#">@2019</span>
+        <a class="nav-link" href="#">宝贝计划</a>
+    </div>
+
+</div>
+</body>
+{% endblock %}
