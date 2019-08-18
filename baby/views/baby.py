@@ -61,7 +61,7 @@ def add_baby_info():
             db = get_db()
             baby_model.add_baby(db, g.user['id'], baby_name, baby_sex, birthday, introduce)
             return redirect(url_for('baby.mine'))
-    return render_template('baby/create_baby.html')
+    return render_template('baby/baby_detail.html')
 
 
 @bp.route('/add/diary', methods=('GET', 'POST'))
@@ -76,7 +76,6 @@ def add_baby_diary():
             db = get_db()
             baby_model.add_baby_diary(db, g.user['id'], baby_id, record_date, diary)
             return redirect(url_for('baby.mine'))
-    return render_template('baby/create_diary.html')
 
 
 @bp.route('/add/healthy', methods=('GET', 'POST'))
@@ -95,7 +94,7 @@ def add_baby_healthy():
             baby_model.add_baby_healthy(db, g.user['id'], baby_id,
                                         record_date, my_weight, my_height, remarks)
             return redirect(url_for('baby.mine'))
-    return render_template('baby/create_healthy.html')
+    return render_template('baby/healthy_detail.html')
 
 
 @bp.route('/add/footprint', methods=('POST',))
