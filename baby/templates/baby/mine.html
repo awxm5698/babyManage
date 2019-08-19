@@ -59,8 +59,8 @@
             </button>
         </div>
         <div class="col-xs-6 ele-center" style="margin:10px 0 10px">
-            <a href="#">
-                <button type="button" class="btn btn-lg">管理日记</button>
+            <a href="{{ url_for('baby.relative')}}">
+                <button type="button" class="btn btn-lg">我的亲属</button>
             </a>
         </div>
     </div>
@@ -71,11 +71,20 @@
             </button>
         </div>
         <div class="col-xs-6 ele-center" style="margin:10px 0 10px">
-            <a href="#">
+            <a href="{{ url_for('baby.upload')}}">
                 <button type="button" class="btn btn-lg">上传照片</button>
             </a>
         </div>
     </div>
+{% if g.user['user_level']==0 %}
+    <div class="row clearfix bg-primary img-rounded" style="margin:10px 10px 15px;height:auto">
+        <div class="col-xs-12 ele-center" style="margin:10px 0 10px">
+            <a href="{{ url_for('baby.config') }}">
+                <button type="button" class="btn btn-lg btn-block">配置管理</button>
+            </a>
+        </div>
+    </div>
+{% endif %}
     <div class="row clearfix bg-primary img-rounded" style="margin:10px 10px 15px;height:auto">
         <div class="col-xs-12 ele-center" style="margin:10px 0 10px">
             <a href="{{ url_for('auth.logout') }}">
@@ -100,7 +109,7 @@
                         <label for="record_date" class="col-xs-3 input-lg">年月</label>
                         <div class="col-xs-9">
                             <input type="text" class="form-control input-lg"
-                                   placeholder="请输入年份月份，例如：201907" name="record_date"
+                                   placeholder="请输入年月，例：201907" name="record_date"
                                    id="record_date" value="{{ request.form['record_date'] }}" required/>
                         </div>
                     </div>
@@ -153,6 +162,15 @@
                         <textarea type="text" class="form-control input-lg"
                                   placeholder="请输入日记内容,30字以内" name="diary"
                                   id="diary" value="{{ request.form['diary'] }}"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="recordBy" class="col-xs-3 input-lg">记录人</label>
+                        <div class="col-xs-9">
+                            <select class="col-xs-9 input-lg" name="recordBy" id="recordBy">
+                                <option class="input-lg">爸爸</option>
+                                <option class="input-lg">妈妈</option>
+                            </select>
                         </div>
                     </div>
                     <div class="form-group">

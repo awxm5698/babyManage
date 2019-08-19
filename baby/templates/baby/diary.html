@@ -8,17 +8,22 @@
 </div>
 {% for diary in baby_diary%}
 <div class="row clearfix bg-primary img-rounded" style="margin:30px 10px 10px">
-    <div style="margin:10px 0px 10px">
-        <div class="col-xs-4 bg-success img-rounded"
-             style="position:relative;left:10px;top:-50px;text-align: center">
-            <h5 style="color:red">{{ diary['record_date'] }}</h5>
+    <a href="{{ url_for('baby.diary_update',diary_id=diary['id'])}}">
+        <div style="margin:10px 0px 10px">
+            <div class="col-xs-4 bg-success img-rounded"
+                 style="position:relative;left:10px;top:-50px;text-align: center">
+                <h5 style="color:red">{{ diary['record_date'] }}</h5>
+            </div>
+
+            <div style="margin:30px 20px 20px;">
+
+                <p class="text-left" style="color:#00FF00">
+                    {{ diary['diary'] }}</p>
+            </div>
+
+            <h5 class="text-right" style="color:#F8F8F8"> -- 来自{{ diary['record_by'] }}的记录</h5>
         </div>
-        <div style="margin:30px 20px 20px;">
-            <p class="text-left">
-                {{ diary['diary'] }}</p>
-        </div>
-        <h5 class="text-right"> -- 来自爸爸的记录</h5>
-    </div>
+    </a>
 </div>
 {% endfor%}
 <div class="row clearfix " style="margin:30px 10px 40px">

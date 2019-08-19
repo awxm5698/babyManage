@@ -1,13 +1,13 @@
 {% extends 'base_baby.html' %}
 
-<h1>{% block title %}相册{% endblock %}</h1>
-{% block pageName %}宝宝相册{% endblock %}
+<h1>{% block title %}足迹{% endblock %}</h1>
+{% block pageName %}{{footprint['footprint_name']}}{% endblock %}
 {% block content %}
 
 <div class="row img-rounded" style="margin:50px 10px 50px">
     {% for ph in photo%}
     <div class="col-xs-6" style="margin:10px 0px 10px;max-weight:150px;max-height:230px;overflow-x: hidden">
-        <img src="{{ g.config['img_path'] }}{{ph['img_path']}}"
+        <img src="../{{ g.config['img_path'] }}{{ph['img_path']}}"
              class="img-rounded" style="width:150px;height:150px;"/>
         {% if ph['title']=="" %}
         <br><p>名称：<span class="text-left">{{ph['img_path']}}</span></p>
@@ -15,7 +15,7 @@
         <br><p>名称：<span class="text-left">{{ph['title']}}</span></p>
         {% endif %}
         <p>描述：<span class="text-left">{{ph['title']}}</span><br>
-        日期：<span class="text-right">{{ph['record_date']}}</span></p>
+            日期：<span class="text-right">{{ph['record_date']}}</span></p>
     </div>
     {% endfor %}
 

@@ -8,6 +8,7 @@
      style="margin:50px 10px 50px ;overflow:hidden;">
     <h3 class="text-center">健康记录</h3>
     {% for healthy in baby_healthy%}
+    <a href="{{ url_for('baby.update_healthy',healthy_id=healthy['id']) }}">
     <div class="bg-success img-rounded" style="margin:10px 10px 10px">
         <p style="font-size:16px;">记录日期: &nbsp;
         <span style="color:#FF00CC">{{ healthy['record_date'] }}</span>
@@ -19,6 +20,7 @@
         <span style="color:#FF00CC">{{ healthy['remarks'] }}</span>
         </p>
     </div>
+    </a>
     {% endfor%}
     <div class="carousel-inner" style="text-align:center;margin:10px 0px 10px">
         <img style="max-height:300px" src="../static/{{img_name}}" />

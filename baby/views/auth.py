@@ -85,6 +85,14 @@ def load_logged_in_user():
         ).fetchone()
 
 
+@bp.before_app_request
+def load_config():
+    g.config = {}
+    configs = get_db().execute('select * from config').fetchall()
+    for config in configs:
+        g.config[config['key']] = config['value']
+
+
 def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):

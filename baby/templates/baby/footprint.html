@@ -7,11 +7,11 @@
     <div class="row clearfix img-rounded" style="margin:50px 10px 10px">
         {% for footprint in footprints %}
             <div class="col-xs-6" style="margin:10px 0px 10px">
-                <a href="#">
+                <a href="{{ url_for('baby.footprint_detail',footprint_id=footprint['id'])}}">
                     <img style="weight:150px;height:150px" src="../static/img/s3.jpg" class="img-circle"/>
                 </a>
                 <div class="text-center">
-                    <a href="#">{{ footprint['footprint_name'] }}</a>
+                    <a href="{{ url_for('baby.footprint_detail',footprint_id=footprint['id'])}}">{{ footprint['footprint_name'] }}</a>
                 </div>
                 <div class="text-right">
                     <span>@{{ footprint['record_date'] }}</span>

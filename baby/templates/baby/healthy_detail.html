@@ -7,37 +7,46 @@
 {% block pageName %}健康管理{% endblock %}
 {% block content %}
 <div class="row clearfix bg-primary img-rounded" style="margin:50px 10px 15px">
-    <form role="form" class="form-block" id="loginForm" action="{{ url_for('baby.add_baby_healthy') }}" method="post">
+    <form role="form" class="form-horizontal" method="post"
+          action="{{ url_for('baby.update_healthy',healthy_id=healthy['id']) }}">
         <div class="form-group">
-            <label for="record_date"></label>
-            <input type="text" class="form-control input-lg"
-                   placeholder="请输入日期，例如：2019-07-11" name="record_date"
-                   id="record_date" value="{{ request.form['record_date'] }}" required/>
+            <label for="record_date" class="col-xs-3 input-lg">日期</label>
+            <div class="col-xs-6">
+                <input type="date" class="form-control input-lg"
+                       placeholder="请输入日期，例如：2019-07-11" name="record_date"
+                       id="record_date" value="{{ request.form['record_date'] or healthy['record_date'] }}" required/>
+            </div>
         </div>
         <div class="form-group">
-            <label for="my_weight"></label>
-            <input type="text" class="form-control input-lg"
-                   placeholder="请输入体重，单位kg" name="my_weight"
-                   id="my_weight" value="{{ request.form['my_weight'] }}" required/>
+            <label for="weight" class="col-xs-3 input-lg">体重</label>
+            <div class="col-xs-6">
+                <input type="text" class="form-control input-lg"
+                       placeholder="请输入体重，单位kg" name="weight"
+                       id="weight" value="{{ request.form['weight'] or healthy['weight'] }}" required/>
+            </div>
+            <b class="input-lg">KG</b>
         </div>
         <div class="form-group">
-            <label for="my_height"></label>
-            <input type="text" class="form-control input-lg"
-                   placeholder="请输入身高，单位cm" name="my_height"
-                   id="my_height" value="{{ request.form['my_height'] }}" required/>
+            <label for="height" class="col-xs-3 input-lg">身高</label>
+            <div class="col-xs-6">
+                <input type="text" class="form-control input-lg"
+                       placeholder="请输入身高，单位cm" name="height"
+                       id="height" value="{{ request.form['height'] or healthy['height'] }}" required/>
+            </div>
+            <b class="input-lg">cm</b>
         </div>
         <div class="form-group">
-            <label for="remarks"></label>
-            <input type="text" class="form-control input-lg"
-                   placeholder="请输入备注信息" name="remarks"
-                   id="remarks" value="{{ request.form['remarks'] }}" required/>
+            <label for="remarks" class="col-xs-3 input-lg">备注</label>
+            <div class="col-xs-6">
+                <input type="text" class="form-control input-lg"
+                       placeholder="请输入备注信息" name="remarks"
+                       id="remarks" value="{{ request.form['remarks'] or healthy['remarks'] }}" required/>
+            </div>
         </div>
-        <div  class="form-group" >
-            <label></label>
-            <button type="submit" class="btn btn-block btn-lg">提交</button>
-            <a href="{{ url_for('baby.mine') }}">
-                <button type="button" class="btn btn-block btn-lg">取消</button></a>
-
+        <div class="form-group text-center">
+            <a href="{{ url_for('baby.home') }}">
+            <button type="button" class="btn btn-default btn-lg">关闭</button></a>
+            <button type="submit" class="btn btn-primary btn-lg">提交</button>
         </div>
 
     </form>

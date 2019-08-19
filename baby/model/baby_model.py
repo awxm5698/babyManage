@@ -31,10 +31,10 @@ class BabyModel:
         return baby_info
 
     @staticmethod
-    def add_baby_diary(db, user_id, baby_id, record_date, diary):
+    def add_baby_diary(db, user_id, baby_id, record_date, diary, record_by):
         sql = 'insert into manage_diary (baby_id, record_date,' \
-              'diary, create_by) values (?,?,?,?)'
-        db.execute(sql, (baby_id, record_date, diary, user_id))
+              'diary, create_by, record_by) values (?,?,?,?,?)'
+        db.execute(sql, (baby_id, record_date, diary, user_id, record_by))
         db.commit()
 
     @staticmethod

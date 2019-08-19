@@ -64,8 +64,9 @@ create table manage_diary(
     id integer  primary key autoincrement ,
     baby_id not null,
     diary text not null ,
-    record_date date not null,
-    create_by integer not null ,
+    record_date date not null ,
+    record_by character not null ,
+    create_by integer   not null ,
     create_date datetime default current_timestamp ,
     is_deleted  integer  default 0
 );
@@ -95,3 +96,23 @@ create table manage_footprint(
     is_deleted integer default 0 ,
     create_time datetime default current_timestamp
 );
+
+drop table if exists config;
+create table config(
+    id integer primary key autoincrement ,
+    key varchar not null ,
+    value varchar not null ,
+    remarks varchar default null
+);
+insert into config (key,value) values ('img_path','../static/upload/');
+insert into config (key,value) values ('upload_path','C:\Users\vn02sdx\Documents\python\babyManages\baby\static');
+
+drop table if exists relative;
+create table relative(
+    id integer primary key autoincrement ,
+    call_name character not null ,
+    really_name character default null
+);
+
+insert into relative (call_name) values ('爸爸');
+insert into relative (call_name) values ('妈妈');

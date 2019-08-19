@@ -4,26 +4,38 @@
 {% block style %}
 .ele-center{text-align:center}
 {% endblock %}
-{% block pageName %}创建日记{% endblock %}
+{% block pageName %}日记更新{% endblock %}
 {% block content %}
 <div class="row clearfix bg-primary img-rounded" style="margin:50px 10px 15px">
-    <form role="form" class="form-block" id="loginForm" action="{{ url_for('baby.add_baby_diary') }}" method="post">
+    <form role="form" class="form-block"
+          action="{{ url_for('baby.diary_update',diary_id=diary['id']) }}" method="post">
         <div class="form-group">
             <label for="record_date"></label>
             <input type="text" class="form-control input-lg"
                    placeholder="请输入日期，例如：2019-07-11" name="record_date"
-                   id="record_date" value="{{ request.form['record_date'] }}" required/>
+                   id="record_date" value="{{ request.form['record_date'] or diary['record_date'] }}" required/>
         </div>
         <div class="form-group">
             <label for="diary"></label>
             <textarea type="text" class="form-control input-lg"
                       placeholder="请输入日志内容,30字以内" name="diary"
-                      id="diary" value="{{ request.form['diary'] }}" ></textarea>
+                      id="diary" >{{ request.form['diary']  or diary['diary'] }}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="recordBy" class="col-xs-3 input-lg">记录人</label>
+            <div class="col-xs-9">
+                <select class="col-xs-9 input-lg" name="recordBy" id="recordBy">
+                    <!--<option class="input-lg" value="{{ request.form['record_by']  or diary['record_by'] }}">-->
+                        <!--{{ request.form['record_by']  or diary['record_by'] }}</option>-->
+                    <option class="input-lg" value="爸爸">爸爸</option>
+                    <option class="input-lg"  value="妈妈">妈妈</option>
+                </select>
+            </div>
         </div>
         <div  class="form-group" >
             <label></label>
             <button type="submit" class="btn btn-block btn-lg">提交</button>
-            <a href="{{ url_for('baby.mine') }}">
+            <a href="{{ url_for('baby.diary') }}">
                 <button type="button" class="btn btn-block btn-lg">取消</button></a>
 
         </div>
