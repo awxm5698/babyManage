@@ -1,13 +1,11 @@
 {% extends 'base_baby.html' %}
 
-<h1>{% block title %}我的{% endblock %}</h1>
-{% block style %}
-.ele-center{text-align:center}
-{% endblock %}
+<h1>{% block title %}健康{% endblock %}</h1>
+
 {% block pageName %}健康管理{% endblock %}
 {% block content %}
 <div class="row clearfix bg-primary img-rounded" style="margin:50px 10px 15px">
-    <form role="form" class="form-horizontal" method="post"
+    <form role="form" class="form-horizontal" method="post" style="margin:20px 10px 10px"
           action="{{ url_for('baby.update_healthy',healthy_id=healthy['id']) }}">
         <div class="form-group">
             <label for="record_date" class="col-xs-3 input-lg">日期</label>

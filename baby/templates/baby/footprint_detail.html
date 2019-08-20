@@ -6,16 +6,22 @@
 
 <div class="row img-rounded" style="margin:50px 10px 50px">
     {% for ph in photo%}
-    <div class="col-xs-6" style="margin:10px 0px 10px;max-weight:150px;max-height:230px;overflow-x: hidden">
-        <img src="../{{ g.config['img_path'] }}{{ph['img_path']}}"
-             class="img-rounded" style="width:150px;height:150px;"/>
-        {% if ph['title']=="" %}
-        <br><p>名称：<span class="text-left">{{ph['img_path']}}</span></p>
-        {% else%}
-        <br><p>名称：<span class="text-left">{{ph['title']}}</span></p>
+    <div class="col-xs-6" style="margin:10px 0px 10px;max-weight:150px;max-height:220px;overflow-x: hidden">
+        {% if ph['file_type']==0 %}
+        <a href="../{{ g.config['img_path'] }}{{ph['img_path']}}">
+            <img src="../{{ g.config['img_path'] }}{{ph['img_path']}}"
+                 class="img-rounded" style="width:150px;height:150px;"/></a>
+        {% else %}
+        <a href="../{{ g.config['img_path'] }}{{ph['img_path']}}">
+            <video style="width:150px;height:150px;" controls>
+                <source src="../{{ g.config['img_path'] }}{{ph['img_path']}}" type="video/mp4">
+            </video>
+        </a>
         {% endif %}
-        <p>描述：<span class="text-left">{{ph['title']}}</span><br>
-            日期：<span class="text-right">{{ph['record_date']}}</span></p>
+        <a href="{{ url_for('baby.album_update',album_id=ph['id'])}}">
+            <p>描述：<span class="text-left">{{ph['title']}}</span><br>
+                日期：<span class="text-right">{{ph['record_date']}}</span></p>
+        </a>
     </div>
     {% endfor %}
 

@@ -1,17 +1,15 @@
 {% extends 'base_baby.html' %}
 
 <h1>{% block title %}我的{% endblock %}</h1>
-{% block style %}
-.ele-center{text-align:center}
-{% endblock %}
-{% block pageName %}上传照片{% endblock %}
+
+{% block pageName %}上传文件{% endblock %}
 {% block content %}
 <div class="row clearfix img-rounded" style="margin:50px 10px 15px">
     <form action="{{ url_for('baby.upload')}}" method="post"
           enctype="multipart/form-data" class="form-horizontal">
         <div class="form-group">
-            <label for="recordDate" class="col-xs-3 input-lg">日期</label>
-            <input name="recordDate" id="recordDate" class="col-xs-9 input-lg"
+            <label for="recordDate" class="col-xs-3 input-lg ">日期</label>
+            <input name="recordDate" id="recordDate" class="col-xs-9 input-lg date-picker"
                    type="date" required/>
         </div>
         <div class="form-group">
@@ -25,44 +23,51 @@
         <div class="form-group">
             <label for="title" class="col-xs-3 input-lg">主题</label>
             <input name="title" id="title" class="col-xs-9 input-lg"
-                   type="text" placeholder="其输入主题"/>
+                   type="text" placeholder="请输入主题"/>
         </div>
         <div class="form-group">
             <label for="body" class="col-xs-3 input-lg">描述</label>
             <textarea name="body" id="body" class="col-xs-9 input-lg"
-                      type="text" placeholder="请输入照片描述"></textarea>
+                      placeholder="请输入照片描述"></textarea>
         </div>
         <div class="form-group">
             <label for="inputFile" class="input-lg">其选择您要上传的图片</label>
             <input type="file" id="inputFile" name="inputFile" class="input-lg" required>
         </div>
 
-        <button type="submit" class="btn btn-block btn-lg">Submit</button>
-        {% for message in get_flashed_messages() %}
-        {% if message=="Success" %}
-        <div class="flash">
-            <div class="alert alert-success alert-dismissable" style="margin:20px 0px 10px">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                <h4>
-                    温馨提示：
-                </h4> <strong>上传成功!</strong>您可以继续上传下一张图片
-            </div>
-        </div>
-        {% else%}
-        <div class="flash">
-            <div class="alert alert-success alert-dismissable" style="margin:20px 0px 10px">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                <h4>
-                    温馨提示：
-                </h4> <strong>{{message}}!</strong>
-            </div>
-        </div>
-        {% endif %}
-
-        {% endfor %}
-
+        <button type="submit" class="btn btn-block btn-lg">保存</button>
 
     </form>
-</div>
+    {% for message in get_flashed_messages() %}
+    {% if message=="Success" %}
+    <div class="flash">
+        <div class="alert alert-success alert-dismissable" style="margin:20px 0px 10px">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <h4>
+                温馨提示：
+            </h4> <strong>上传成功!</strong>您可以继续上传下一张图片
+        </div>
+    </div>
+    {% else%}
+    <div class="flash">
+        <div class="alert alert-success alert-dismissable" style="margin:20px 0px 10px">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <h4>
+                温馨提示：
+            </h4> <strong>{{message}}!</strong>
+        </div>
+    </div>
+    {% endif %}
 
+    {% endfor %}
+</div>
+<script>
+    $(document).ready(function () {
+        var time = new Date();
+        var day = ("0" + time.getDate()).slice(-2);
+        var month = ("0" + (time.getMonth() + 1)).slice(-2);
+        var today = time.getFullYear() + "-" + (month) + "-" + (day);
+        $('.date-picker').val(today);
+    })
+</script>
 {% endblock %}

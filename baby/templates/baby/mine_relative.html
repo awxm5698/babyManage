@@ -1,9 +1,7 @@
 {% extends 'base_baby.html' %}
 
-<h1>{% block title %}我的{% endblock %}</h1>
-{% block style %}
-.ele-center{text-align:center}
-{% endblock %}
+<h1>{% block title %}我的亲属{% endblock %}</h1>
+
 {% block pageName %}我的亲属{% endblock %}
 {% block content %}
 <div class="row clearfix bg-primary img-rounded" style="margin:50px 10px 15px">
@@ -23,7 +21,7 @@
         <hr>
     </div>
     {% endfor%}
-    <div class="col-xs-12 ele-center" style="margin:10px 0 10px">
+    <div class="col-xs-12 text-center" style="margin:10px 0 10px">
         <button type="button" class="btn btn-lg"
                 data-toggle="modal" data-target="#addRelative">添加亲属
         </button>

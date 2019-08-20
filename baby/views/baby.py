@@ -1,9 +1,11 @@
 import os
+import hashlib
+import time
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, url_for
 )
-from werkzeug.exceptions import abort
-from werkzeug import secure_filename
+# from werkzeug.exceptions import abort
+# from werkzeug import secure_filename
 from .auth import login_required
 from baby.db import get_db
 from baby.model.baby_model import BabyModel
@@ -15,11 +17,11 @@ baby_model = BabyModel()
 @login_required
 def home():
     baby_healthy = baby_model.get_baby_healthy(get_db(), g.user['id'])
-    img_name = 'upload/a1.jpg'
-    return render_template('baby/home.html', baby_healthy=baby_healthy, img_name=img_name)
+    baby_info = baby_model.get_baby_info(get_db(), g.user['id'])
+    return render_template('baby/home.html', baby_healthy=baby_healthy, baby_info=baby_info)
 
 
-@bp.route('/healthy/<int:healthy_id>/detail', methods=('POST','GET'))
+@bp.route('/healthy/<int:healthy_id>/detail', methods=('POST', 'GET'))
 @login_required
 def update_healthy(healthy_id):
     healthy = get_db().execute('select * from manage_healthy where id=?',
@@ -30,7 +32,6 @@ def update_healthy(healthy_id):
         my_weight = request.form['weight']
         my_height = request.form['height']
         remarks = request.form['remarks']
-        print(record_date, diary)
         error = None
         if error is None:
             db = get_db()
@@ -44,17 +45,48 @@ def update_healthy(healthy_id):
 @bp.route('/album')
 @login_required
 def album():
-    photo = get_db().execute('select * from manage_album order by record_date desc').fetchall()
+    photo = get_db().execute('select * from manage_album where is_deleted=0'
+                             ' order by record_date desc').fetchall()
     return render_template('baby/album.html', photo=photo)
+
+
+@bp.route('/album/<int:album_id>/update', methods=('POST', 'GET'))
+@login_required
+def album_update(album_id):
+    footprints = baby_model.get_footprint(get_db(), g.user['id'])
+    photo = get_db().execute('select * from manage_album where id=?',
+                             (album_id,)).fetchone()
+    if request.method == 'POST':
+        record_date = request.form['recordDate']
+        footprint = request.form['footprint']
+        title = request.form['title']
+        body = request.form['body']
+        error = None
+        if error is None:
+            db = get_db()
+            db.execute('update manage_album set title=?,body=?,footprint=?,'
+                       'record_date=? where id=?',
+                       (title, body, footprint, record_date, album_id))
+            db.commit()
+            return redirect(url_for('baby.album'))
+    return render_template('baby/album_detail.html', footprints=footprints, photo=photo)
+
+
+@bp.route('/album/<int:album_id>/delete', methods=('POST',))
+@login_required
+def album_delete(album_id):
+    if request.method == 'POST':
+        get_db().execute('update manage_album set is_deleted=1 where id=?', (album_id,))
+        get_db().commit()
+        return redirect(url_for('baby.album'))
 
 
 @bp.route('/mine')
 @login_required
 def mine():
-    user = {'name': '宝宝', 'address': '深圳龙华'}
     db = get_db()
     baby_info = baby_model.get_baby_info(db, g.user['id'])
-    return render_template('baby/mine.html', user=user, baby_info=baby_info)
+    return render_template('baby/mine.html', baby_info=baby_info)
 
 
 @bp.route('/relative')
@@ -107,9 +139,10 @@ def footprint():
 @bp.route('/footprint/<int:footprint_id>/detail')
 @login_required
 def footprint_detail(footprint_id):
-    footprint = get_db().execute('select * from manage_footprint where id=?',
+    footprint = get_db().execute('select * from manage_footprint where id=? ',
                                  (footprint_id,)).fetchone()
-    photo = get_db().execute('select * from manage_album where footprint=?',
+    photo = get_db().execute('select * from manage_album where footprint=? '
+                             ' order by record_date desc',
                              (footprint_id,)).fetchall()
     return render_template('baby/footprint_detail.html', footprint=footprint, photo=photo)
 
@@ -123,7 +156,7 @@ def diary():
 
 @bp.route('/diary/<int:diary_id>/update', methods=('GET', 'POST'))
 @login_required
-def diary_update(diary_id):
+def update_diary(diary_id):
     diary = get_db().execute('select * from manage_diary where id=?',
                              (diary_id,)).fetchone()
     if request.method == 'POST':
@@ -154,6 +187,16 @@ def add_baby_info():
             baby_model.add_baby(db, g.user['id'], baby_name, baby_sex, birthday, introduce)
             return redirect(url_for('baby.mine'))
     return render_template('baby/baby_detail.html')
+
+
+@bp.route('/update/baby/<int:baby_id>/information', methods=('GET', 'POST'))
+@login_required
+def update_baby_info(baby_id):
+    baby_info = get_db().execute('select * from baby_info where id=?',
+                                 (baby_id,)).fetchone()
+    if request.method == 'POST':
+        return redirect(url_for('baby.home'))
+    return render_template('baby/baby_detail.html', baby_info=baby_info)
 
 
 @bp.route('/add/diary', methods=('GET', 'POST'))
@@ -197,12 +240,82 @@ def add_footprint():
         record_date = request.form['record_date']
         footprint_name = request.form['footprint_name']
         footprint_desc = request.form['footprint_desc']
-
+        footprint_img = request.files['inputFile']
         error = None
+        upload_path = os.path.join(g.config['upload_path'], 'upload')
+        results = upload_file(upload_path, footprint_img)
+        if results.get('status') == 'success':
+            filename = results.get('filename')
+        else:
+            error = results.get('msg')
+            flash(error)
+
         if error is None:
             db = get_db()
-            baby_model.add_footprint(db, g.user['id'], record_date, footprint_name, footprint_desc)
+            baby_model.add_footprint(db, g.user['id'], record_date, footprint_name, footprint_desc, filename)
             return redirect(url_for('baby.mine'))
+
+
+@bp.route('/update/<int:footprint_id>/footprint', methods=('POST','GET'))
+@login_required
+def update_footprint(footprint_id):
+    footprint_info = get_db().execute('select * from manage_footprint where id=?',
+                                      (footprint_id,)).fetchone()
+    if request.method == 'POST':
+        record_date = request.form['record_date']
+        footprint_name = request.form['footprint_name']
+        footprint_desc = request.form['footprint_desc']
+        footprint_img = request.files['inputFile']
+        error = None
+        if footprint_img:
+            upload_path = os.path.join(g.config['upload_path'], 'upload')
+            results = upload_file(upload_path, footprint_img)
+            if results.get('status') == 'success':
+                filename = results.get('filename')
+            else:
+                error = results.get('msg')
+                flash(error)
+        else:
+            filename = footprint_info['footprint_img']
+
+        if error is None:
+            db = get_db()
+            baby_model.update_footprint(db, footprint_id, record_date, footprint_name, footprint_desc, filename)
+            return redirect(url_for('baby.footprint'))
+    return render_template('baby/footprint_update.html', footprint_info=footprint_info)
+
+
+def allowed_file(filename):
+    img_extensions = g.config['img_extensions']
+    video_extensions = g.config['video_extensions']
+    file_type = None
+    if '.' in filename and filename.rsplit('.', 1)[-1] in img_extensions:
+        file_type = 0
+    if '.' in filename and filename.rsplit('.', 1)[-1] in video_extensions:
+        file_type = 1
+    return file_type
+
+
+def upload_file(upload_path, file):
+    results = {'msg': '', 'status': '', 'filename': ''}
+    file_type = allowed_file(file.filename)
+    if file and file_type is not None:
+        file_extensions = file.filename.rsplit('.', 1)[-1]
+        now_time = str(time.time()).split('.')[0]
+        filename = '{}-{}.{}'.format(now_time, my_md5(now_time), file_extensions)
+        try:
+            file.save(os.path.join(upload_path, filename))
+            results['status'] = 'success'
+            results['msg'] = '上传成功'
+            results['filename'] = filename
+            results['file_type'] = file_type
+        except OSError as e:
+            results['status'] = 'error'
+            results['msg'] = e
+    else:
+        results['status'] = 'error'
+        results['msg'] = '上传文件必须是{}等格式'.format(str(g.config['img_extensions']))
+    return results
 
 
 @bp.route('/upload', methods=('GET', 'POST'))
@@ -216,23 +329,26 @@ def upload():
         title = request.form['title']
         body = request.form['body']
         file = request.files['inputFile']
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(g.config['upload_path'], 'upload', filename))
         error = None
-        file_exist = get_db().execute('select * from manage_album where img_path=?',
-                                      (filename,)).fetchone()
-        if file_exist:
-            error = '警告，该名称的照片已上传，请重新选择照片'
+        upload_path = os.path.join(g.config['upload_path'], 'upload')
+        results = upload_file(upload_path, file)
+        if results.get('status') == 'success':
+            filename = results.get('filename')
+            file_type = results.get('file_type')
+        else:
+            error = results.get('msg')
+            flash(error)
         if error is None:
             db = get_db()
             db.execute('insert into manage_album (baby_id,title,body,footprint,'
-                       'img_path,record_date,create_by) '
-                       'values(?,?,?,?,?,?,?)', (baby_id, title, body, footprint,
-                                                 filename, record_date, g.user['id']))
+                       'img_path,record_date,create_by,file_type) '
+                       'values(?,?,?,?,?,?,?,?)',
+                       (baby_id, title, body, footprint,
+                        filename, record_date, g.user['id'], file_type))
             db.commit()
             error = 'Success'
-        flash(error)
-        return redirect(url_for('baby.upload', footprints=footprints))
+            flash(error)
+            return redirect(url_for('baby.upload'))
     return render_template('baby/upload.html', footprints=footprints)
 
 
@@ -287,3 +403,9 @@ def delete_config(config_id):
                              (config_id,))
             get_db().commit()
             return redirect(url_for('baby.config'))
+
+
+def my_md5(string):
+    h = hashlib.md5()
+    h.update(string.encode(encoding='utf-8'))
+    return h.hexdigest()

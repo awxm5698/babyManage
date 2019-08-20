@@ -39,7 +39,8 @@ class BabyModel:
 
     @staticmethod
     def get_baby_diary(db, user_id):
-        sql = 'select * from manage_diary where create_by = ? order by record_date desc'
+        sql = 'select * from manage_diary where create_by = ? and is_deleted=0 ' \
+              ' order by record_date desc'
         baby_diary = db.execute(sql, (user_id,)).fetchall()
         return baby_diary
 
@@ -54,20 +55,28 @@ class BabyModel:
 
     @staticmethod
     def get_baby_healthy(db, user_id):
-        sql = 'select * from manage_healthy where create_by = ? order by record_date'
+        sql = 'select * from manage_healthy where create_by = ? ' \
+              ' and is_deleted=0 order by record_date'
         baby_healthy = db.execute(sql, (user_id,)).fetchall()
         return baby_healthy
 
     @staticmethod
-    def add_footprint(db, user_id, record_date, footprint_name,footprint_desc):
+    def add_footprint(db, user_id, record_date, footprint_name, footprint_desc, footprint_img):
         sql = 'insert into manage_footprint (user_id, record_date, footprint_name,' \
-              'footprint_desc) values (?,?,?,?)'
-        db.execute(sql, (user_id, record_date, footprint_name, footprint_desc))
+              'footprint_desc,footprint_img) values (?,?,?,?,?)'
+        db.execute(sql, (user_id, record_date, footprint_name, footprint_desc,footprint_img))
+        db.commit()
+
+    @staticmethod
+    def update_footprint(db, footprint_id, record_date, footprint_name, footprint_desc, footprint_img):
+        sql = 'update manage_footprint set record_date=?, footprint_name=?,' \
+              'footprint_desc=?, footprint_img=? where id=?'
+        db.execute(sql, (record_date, footprint_name, footprint_desc, footprint_img, footprint_id))
         db.commit()
 
     @staticmethod
     def get_footprint(db, user_id):
-        sql = 'select * from manage_footprint where user_id = ?'
+        sql = 'select * from manage_footprint where user_id = ? and is_deleted=0'
         footprint = db.execute(sql, (user_id,)).fetchall()
         return footprint
 

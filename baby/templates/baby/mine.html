@@ -1,295 +1,296 @@
 {% extends 'base_baby.html' %}
 
 <h1>{% block title %}我的{% endblock %}</h1>
-{% block style %}
-    .ele-center{text-align:center}
-{% endblock %}
 {% block pageName %}信息管理{% endblock %}
 {% block content %}
-    <div class="row clearfix bg-primary img-rounded" style="margin:50px 10px 15px">
-        <div class="col-xs-4" style="margin:10px 0 10px">
-            <img style="weight:100px;height:100px" src="../static/img/s3.jpg" class="img-circle"/>
-        </div>
-        <div class="col-xs-8" style="margin:10px 0 10px">
-            <h2>
-                {{ user.name }}
-            </h2>
-            <p>{{ user.address }}</p>
-        </div>
+<div class="row clearfix bg-primary img-rounded" style="margin:50px 10px 15px">
+    <div class="col-xs-4" style="margin:10px 0 10px">
+        <img style="weight:100px;height:100px" src="../static/img/s3.jpg" class="img-circle"/>
     </div>
-    <div class="row clearfix bg-primary img-rounded" style="margin:10px 10px 15px;height:auto">
+    <div class="col-xs-8" style="margin:10px 0 10px">
+        <h2>
+            {{ g.user['user_name'] }}
+        </h2>
+        <p>{{ g.user['email'] }}</p>
+    </div>
+</div>
+<div class="row clearfix bg-primary img-rounded" style="margin:10px 10px 15px;height:auto">
 
-        {% for baby in baby_info %}
-            <div class="text-center">
-                <p style="font-size:16px;">宝宝姓名: &nbsp;
-                    <span style="color:#FF00CC">{{ baby['baby_name'] }}</span>
-                    &nbsp;||&nbsp;生日: &nbsp;
-                    <span style="color:#FF00CC">{{ baby['birthday'] }}</span></p>
-            </div>
-        {% endfor %}
+    {% for baby in baby_info %}
+    <div class="text-center">
+        <p style="font-size:16px;">宝宝姓名: &nbsp;
+            <span style="color:#FF00CC">{{ baby['baby_name'] }}</span>
+            &nbsp;||&nbsp;生日: &nbsp;
+            <span style="color:#FF00CC">{{ baby['birthday'] }}</span></p>
+    </div>
+    {% endfor %}
 
-        <div class="col-xs-6 ele-center" style="margin:10px 0 10px">
-            <button type="button" class="btn btn-lg"
-                    data-toggle="modal" data-target="#addBaby">添加信息
-            </button>
-        </div>
-        <div class="col-xs-6 ele-center" style="margin:10px 0 10px">
-            <a href="#">
-                <button type="button" class="btn btn-lg">修改信息</button>
-            </a>
-        </div>
+    <div class="col-xs-6 text-center" style="margin:10px 0 10px">
+        <button type="button" class="btn btn-lg"
+                data-toggle="modal" data-target="#addBaby">添加信息
+        </button>
     </div>
-    <div class="row clearfix bg-primary img-rounded" style="margin:10px 10px 15px;height:auto">
-        <div class="col-xs-6 ele-center" style="margin:10px 0 10px">
-            <button type="button" class="btn btn-lg"
-                    data-toggle="modal" data-target="#addHealthy">健康记录
-            </button>
+    <div class="col-xs-6 text-center" style="margin:10px 0 10px">
+        <a href="{{ url_for('baby.relative')}}">
+            <button type="button" class="btn btn-lg">我的亲属</button>
+        </a>
+    </div>
+</div>
+<div class="row clearfix bg-primary img-rounded" style="margin:10px 10px 15px;height:auto">
+    <div class="col-xs-6 text-center" style="margin:10px 0 10px">
+        <button type="button" class="btn btn-lg"
+                data-toggle="modal" data-target="#addHealthy">健康记录
+        </button>
 
-        </div>
-        <div class="col-xs-6 ele-center" style="margin:10px 0 10px">
-            <a href="#">
-                <button type="button" class="btn btn-lg">健康管理</button>
-            </a>
-        </div>
     </div>
-    <div class="row clearfix bg-primary img-rounded" style="margin:10px 10px 15px;height:auto">
-        <div class="col-xs-6 ele-center" style="margin:10px 0 10px">
-            <button type="button" class="btn btn-lg"
-                    data-toggle="modal" data-target="#addDiary">添加日记
-            </button>
-        </div>
-        <div class="col-xs-6 ele-center" style="margin:10px 0 10px">
-            <a href="{{ url_for('baby.relative')}}">
-                <button type="button" class="btn btn-lg">我的亲属</button>
-            </a>
-        </div>
+    <div class="col-xs-6 text-center" style="margin:10px 0 10px">
+        <button type="button" class="btn btn-lg"
+                data-toggle="modal" data-target="#addDiary">添加日记
+        </button>
     </div>
-    <div class="row clearfix bg-primary img-rounded" style="margin:10px 10px 15px;height:auto">
-        <div class="col-xs-6 ele-center" style="margin:10px 0 10px">
-            <button type="button" class="btn btn-lg"
-                    data-toggle="modal" data-target="#addFootprint">创建足迹
-            </button>
-        </div>
-        <div class="col-xs-6 ele-center" style="margin:10px 0 10px">
-            <a href="{{ url_for('baby.upload')}}">
-                <button type="button" class="btn btn-lg">上传照片</button>
-            </a>
-        </div>
+</div>
+<div class="row clearfix bg-primary img-rounded" style="margin:10px 10px 15px;height:auto">
+
+    <div class="col-xs-6 text-center" style="margin:10px 0 10px">
+        <button type="button" class="btn btn-lg"
+                data-toggle="modal" data-target="#addFootprint">创建足迹
+        </button>
     </div>
+    <div class="col-xs-6 text-center" style="margin:10px 0 10px">
+        <a href="{{ url_for('baby.upload')}}">
+            <button type="button" class="btn btn-lg">上传文件</button>
+        </a>
+    </div>
+</div>
+
 {% if g.user['user_level']==0 %}
-    <div class="row clearfix bg-primary img-rounded" style="margin:10px 10px 15px;height:auto">
-        <div class="col-xs-12 ele-center" style="margin:10px 0 10px">
-            <a href="{{ url_for('baby.config') }}">
-                <button type="button" class="btn btn-lg btn-block">配置管理</button>
-            </a>
-        </div>
+<div class="row clearfix bg-primary img-rounded" style="margin:10px 10px 15px;height:auto">
+    <div class="col-xs-12 text-center" style="margin:10px 0 10px">
+        <a href="{{ url_for('baby.config') }}">
+            <button type="button" class="btn btn-lg btn-block">配置管理</button>
+        </a>
     </div>
+</div>
 {% endif %}
-    <div class="row clearfix bg-primary img-rounded" style="margin:10px 10px 15px;height:auto">
-        <div class="col-xs-12 ele-center" style="margin:10px 0 10px">
-            <a href="{{ url_for('auth.logout') }}">
-                <button type="button" class="btn btn-lg btn-block">退出</button>
-            </a>
-        </div>
+<div class="row clearfix bg-primary img-rounded" style="margin:10px 10px 15px;height:auto">
+    <div class="col-xs-12 text-center" style="margin:10px 0 10px">
+        <a href="{{ url_for('auth.logout') }}">
+            <button type="button" class="btn btn-lg btn-block">退出</button>
+        </a>
     </div>
-    </div>
+</div>
+</div>
 
-    <div class="modal fade text-center" id="addFootprint" tabindex="-1"
-         role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel">新增足迹</h4>
+<div class="modal fade text-center" id="addFootprint" tabindex="-1"
+     role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">新增足迹</h4>
+            </div>
+            <form role="form" class="form-horizontal" style="margin:20px 10px 10px"
+                  action="{{ url_for('baby.add_footprint') }}"
+                  method="post" style="margin:10px 10px 10px" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="record_date" class="col-xs-3 input-lg">日期</label>
+                    <div class="col-xs-9">
+                        <input type="date" class="form-control input-lg date-picker" name="record_date"
+                               id="record_date" value="{{ request.form['record_date'] }}" required/>
+                    </div>
                 </div>
-                <form role="form" class="form-horizontal"
-                      action="{{ url_for('baby.add_footprint') }}"
-                      method="post" style="margin:10px 10px 10px">
-                    <div class="form-group">
-                        <label for="record_date" class="col-xs-3 input-lg">年月</label>
-                        <div class="col-xs-9">
-                            <input type="text" class="form-control input-lg"
-                                   placeholder="请输入年月，例：201907" name="record_date"
-                                   id="record_date" value="{{ request.form['record_date'] }}" required/>
-                        </div>
+                <div class="form-group">
+                    <label for="footprint_name" class="col-xs-3 input-lg">足迹</label>
+                    <div class="col-xs-9">
+                        <input type="text" class="form-control input-lg"
+                               placeholder="请输入足迹名称" name="footprint_name"
+                               id="footprint_name" value="{{ request.form['footprint_name'] }}" required/>
                     </div>
-                    <div class="form-group">
-                        <label for="footprint_name" class="col-xs-3 input-lg">足迹</label>
-                        <div class="col-xs-9">
-                            <input type="text" class="form-control input-lg"
-                                   placeholder="请输入足迹名称" name="footprint_name"
-                                   id="footprint_name" value="{{ request.form['footprint_name'] }}" required/>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="footprint_desc" class="col-xs-3 input-lg">描述</label>
-                        <div class="col-xs-9">
-                            <input type="text" class="form-control input-lg"
-                                   placeholder="请输入足迹描述" name="footprint_desc"
-                                   id="footprint_desc" value="{{ request.form['footprint_desc'] }}"/>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <button type="button" class="btn btn-default btn-lg" data-dismiss="modal">关闭</button>
-                        <button type="submit" class="btn btn-primary btn-lg">提交</button>
-                    </div>
-                </form>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal -->
-    </div>
-
-    <div class="modal fade text-center" id="addDiary" tabindex="-1"
-         role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title input-lg" id="myModalLabel">新增日记</h4>
                 </div>
-                <form role="form" class="form-horizontal" action="{{ url_for('baby.add_baby_diary') }}" method="post">
-                    <div class="form-group">
-                        <label for="record_date" class="col-xs-3 input-lg">日期</label>
-                        <div class="col-xs-9">
-                            <input type="date" class="form-control input-lg"
-                                   placeholder="请输入日期，例如：2019-07-11" name="record_date"
-                                   id="record_date" value="{{ request.form['record_date'] }}" required/>
-                        </div>
+
+                <div class="form-group">
+                    <label for="footprint_desc" class="col-xs-3 input-lg">描述</label>
+                    <div class="col-xs-9">
+                        <textarea class="form-control input-lg"
+                                  placeholder="请输入足迹描述" name="footprint_desc"
+                                  id="footprint_desc">{{ request.form['footprint_desc'] }}</textarea>
                     </div>
-                    <div class="form-group">
-                        <label for="diary" class="col-xs-3 input-lg">日记</label>
-                        <div class="col-xs-9">
+                </div>
+                <div class="form-group">
+                    <label for="inputFile" class="col-xs-3 input-lg">主图</label>
+                    <input type="file" id="inputFile" name="inputFile" class="col-xs-9 input-lg" required>
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-default btn-lg" data-dismiss="modal">关闭</button>
+                    <button type="submit" class="btn btn-primary btn-lg">提交</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<div class="modal fade text-center" id="addDiary" tabindex="-1"
+     role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title input-lg" id="myModalLabel">新增日记</h4>
+            </div>
+            <form role="form" class="form-horizontal" style="margin:20px 10px 10px"
+                  action="{{ url_for('baby.add_baby_diary') }}" method="post">
+                <div class="form-group">
+                    <label for="record_date" class="col-xs-3 input-lg">日期</label>
+                    <div class="col-xs-9">
+                        <input type="date" class="form-control input-lg  date-picker" name="record_date"
+                               id="record_date" value="{{ request.form['record_date'] }}" required/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="diary" class="col-xs-3 input-lg">日记</label>
+                    <div class="col-xs-9">
                         <textarea type="text" class="form-control input-lg"
                                   placeholder="请输入日记内容,30字以内" name="diary"
                                   id="diary" value="{{ request.form['diary'] }}"></textarea>
-                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="recordBy" class="col-xs-3 input-lg">记录人</label>
-                        <div class="col-xs-9">
-                            <select class="col-xs-9 input-lg" name="recordBy" id="recordBy">
-                                <option class="input-lg">爸爸</option>
-                                <option class="input-lg">妈妈</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label></label>
-                        <button type="button" class="btn btn-default btn-lg" data-dismiss="modal">关闭</button>
-                        <button type="submit" class="btn btn-primary btn-lg">提交</button>
-                    </div>
-
-                </form>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal -->
-    </div>
-
-    <div class="modal fade text-center" id="addHealthy" tabindex="-1"
-         role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title input-lg" id="myModalLabel">健康记录</h4>
                 </div>
-                <form role="form" class="form-horizontal" action="{{ url_for('baby.add_baby_healthy') }}"
-                      method="post">
-                    <div class="form-group">
-                        <label for="record_date" class="col-xs-3 input-lg">日期</label>
-                        <div class="col-xs-9">
-                            <input type="date" class="form-control input-lg"
-                                   placeholder="请输入日期，例如：2019-07-11" name="record_date"
-                                   id="record_date" value="{{ request.form['record_date'] }}" required/>
-                        </div>
+                <div class="form-group">
+                    <label for="recordBy" class="col-xs-3 input-lg">记录人</label>
+                    <div class="col-xs-9">
+                        <select class="col-xs-9 input-lg" name="recordBy" id="recordBy">
+                            <option class="input-lg">爸爸</option>
+                            <option class="input-lg">妈妈</option>
+                        </select>
                     </div>
-                    <div class="form-group">
-                        <label for="my_weight" class="col-xs-3 input-lg">体重</label>
-                        <div class="col-xs-9">
-                            <input type="text" class="form-control input-lg"
-                                   placeholder="请输入体重，单位kg" name="my_weight"
-                                   id="my_weight" value="{{ request.form['my_weight'] }}" required/>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="my_height" class="col-xs-3 input-lg">身高</label>
-                        <div class="col-xs-9">
-                            <input type="text" class="form-control input-lg"
-                                   placeholder="请输入身高，单位cm" name="my_height"
-                                   id="my_height" value="{{ request.form['my_height'] }}" required/>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="remarks" class="col-xs-3 input-lg">备注</label>
-                        <div class="col-xs-9">
-                            <input type="text" class="form-control input-lg"
-                                   placeholder="请输入备注信息" name="remarks"
-                                   id="remarks" value="{{ request.form['remarks'] }}" required/>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <button type="button" class="btn btn-default btn-lg" data-dismiss="modal">关闭</button>
-                        <button type="submit" class="btn btn-primary btn-lg">提交</button>
-                    </div>
-
-                </form>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal -->
-    </div>
-
-    <div class="modal fade text-center" id="addBaby" tabindex="-1"
-         role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title input-lg" id="myModalLabel">添加信息</h4>
                 </div>
-                <form class="form-horizontal"
-                      action="{{ url_for('baby.add_baby_info') }}"
-                      method="post">
-                    <div class="form-group">
-                        <label for="babyName" class="col-xs-3 input-lg">姓名</label>
-                        <div class="col-xs-9">
-                            <input type="text" class="form-control input-lg"
-                                   placeholder="请输入宝宝姓名" name="babyName"
-                                   id="babyName" value="{{ request.form['babyName'] }}" required/>
-                        </div>
+                <div class="form-group">
+                    <label></label>
+                    <button type="button" class="btn btn-default btn-lg" data-dismiss="modal">关闭</button>
+                    <button type="submit" class="btn btn-primary btn-lg">提交</button>
+                </div>
+
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<div class="modal fade text-center" id="addHealthy" tabindex="-1"
+     role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title input-lg" id="myModalLabel">健康记录</h4>
+            </div>
+            <form role="form" class="form-horizontal" style="margin:20px 10px 10px"
+                  action="{{ url_for('baby.add_baby_healthy') }}"
+                  method="post">
+                <div class="form-group">
+                    <label for="record_date" class="col-xs-3 input-lg">日期</label>
+                    <div class="col-xs-9">
+                        <input type="date" class="form-control input-lg date-picker"
+                               name="record_date" id="record_date" required/>
                     </div>
-                    <div class="form-group">
-                        <label for="birthday" class="col-xs-3 input-lg">生日</label>
-                        <div class="col-xs-9">
-                            <input type="date" class="form-control input-lg"
-                                   placeholder="请输入宝宝生日" name="birthday"
-                                   id="birthday" value="{{ request.form['birthday'] }}" required/>
-                        </div>
+                </div>
+                <div class="form-group">
+                    <label for="my_weight" class="col-xs-3 input-lg">体重</label>
+                    <div class="col-xs-9">
+                        <input type="text" class="form-control input-lg"
+                               placeholder="请输入体重，单位kg" name="my_weight"
+                               id="my_weight" value="{{ request.form['my_weight'] }}" required/>
                     </div>
-                    <div class="form-group">
-                        <label for="babySex" class="col-xs-3  input-lg">性别</label>
-                        <div class="col-xs-9  input-lg text-left">
-                            <label class="radio-inline">
-                                <input type="radio" name="babySex" id="babySex1" value="1"> 男
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="babySex" id="babySex2" value="2"> 女
-                            </label>
-                        </div>
+                </div>
+                <div class="form-group">
+                    <label for="my_height" class="col-xs-3 input-lg">身高</label>
+                    <div class="col-xs-9">
+                        <input type="text" class="form-control input-lg"
+                               placeholder="请输入身高，单位cm" name="my_height"
+                               id="my_height" value="{{ request.form['my_height'] }}" required/>
                     </div>
-                    <div class="form-group">
-                        <label for="introduce" class="col-xs-3 input-lg">寄语</label>
-                        <div class="col-xs-9">
-                        <textarea type="text" class="form-control input-lg"
+                </div>
+                <div class="form-group">
+                    <label for="remarks" class="col-xs-3 input-lg">备注</label>
+                    <div class="col-xs-9">
+                        <input type="text" class="form-control input-lg"
+                               placeholder="请输入备注信息" name="remarks"
+                               id="remarks" value="{{ request.form['remarks'] }}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-default btn-lg" data-dismiss="modal">关闭</button>
+                    <button type="submit" class="btn btn-primary btn-lg">提交</button>
+                </div>
+
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<div class="modal fade text-center" id="addBaby" tabindex="-1"
+     role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title input-lg" id="myModalLabel">添加信息</h4>
+            </div>
+            <form class="form-horizontal" style="margin:20px 10px 10px"
+                  action="{{ url_for('baby.add_baby_info') }}"
+                  method="post">
+                <div class="form-group">
+                    <label for="babyName" class="col-xs-3 input-lg">姓名</label>
+                    <div class="col-xs-9">
+                        <input type="text" class="form-control input-lg"
+                               placeholder="请输入宝宝姓名" name="babyName"
+                               id="babyName" value="{{ request.form['babyName'] }}" required/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="birthday" class="col-xs-3 input-lg">生日</label>
+                    <div class="col-xs-9">
+                        <input type="date" class="form-control input-lg"
+                               placeholder="请输入宝宝生日" name="birthday"
+                               id="birthday" value="{{ request.form['birthday'] }}" required/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="babySex" class="col-xs-3  input-lg">性别</label>
+                    <div class="col-xs-9  input-lg text-left">
+                        <label class="radio-inline">
+                            <input type="radio" name="babySex" id="babySex1" value="1"> 男
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="babySex" id="babySex2" value="2"> 女
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="introduce" class="col-xs-3 input-lg">寄语</label>
+                    <div class="col-xs-9">
+                        <textarea class="form-control input-lg"
                                   placeholder="宝贝寄语" name="introduce"
-                                  id="introduce" value="{{ request.form['birthday'] }}"></textarea>
-                        </div>
+                                  id="introduce">{{ request.form['introduce'] }}</textarea>
                     </div>
-                    <div class="form-group">
-                        <button type="button" class="btn btn-default btn-lg" data-dismiss="modal">关闭</button>
-                        <button type="submit" class="btn btn-primary btn-lg">提交</button>
-                    </div>
-                </form>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal -->
-    </div>
-    <div class="row clearfix " style="margin:30px 10px 40px">
-    </div>
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-default btn-lg" data-dismiss="modal">关闭</button>
+                    <button type="submit" class="btn btn-primary btn-lg">提交</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<div class="row clearfix " style="margin:30px 10px 40px">
+</div>
+<script>
+    $(document).ready(function () {
+        var time = new Date();
+        var day = ("0" + time.getDate()).slice(-2);
+        var month = ("0" + (time.getMonth() + 1)).slice(-2);
+        var today = time.getFullYear() + "-" + (month) + "-" + (day);
+        $('.date-picker').val(today);
+    })
+
+
+</script>
 {% endblock %}

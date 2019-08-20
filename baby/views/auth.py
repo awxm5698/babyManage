@@ -1,5 +1,5 @@
 import functools
-
+import os
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for)
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -91,6 +91,18 @@ def load_config():
     configs = get_db().execute('select * from config').fetchall()
     for config in configs:
         g.config[config['key']] = config['value']
+    new_upload_path = os.path.join(get_current_path(), 'static')
+    if new_upload_path != g.config['upload_path']:
+        get_db().execute("update config set value=? where key='upload_path'",
+                         (new_upload_path,))
+        get_db().commit()
+        load_config()
+
+
+def get_current_path():
+    current_path = os.path.split(os.path.realpath(__file__))[0]
+    path = os.path.dirname(current_path)
+    return path
 
 
 def login_required(view):

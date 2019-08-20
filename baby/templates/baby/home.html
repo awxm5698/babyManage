@@ -6,11 +6,32 @@
 
 <div class="row clearfix bg-primary img-rounded"
      style="margin:50px 10px 50px ;overflow:hidden;">
+    <h3 class="text-center">宝宝资料</h3>
+    {% for baby in baby_info%}
+    <a href="{{url_for('baby.update_baby_info',baby_id=baby['id'])}}">
+        <div class="bg-success img-rounded" style="margin:10px 10px 10px">
+            <p style="font-size:16px;margin:10px 10px 10px 20px">
+                姓名: &nbsp;
+                <span style="color:#FF00CC">{{ baby['baby_name'] }}</span>
+                <br>性别: &nbsp;
+                {% if baby['baby_sex']==1 %}
+                <span style="color:#FF00CC">男</span>
+                {% elif baby['baby_sex']==0 %}
+                <span style="color:#FF00CC">女</span>
+                {% endif %}
+                <br>生日: &nbsp;
+                <span style="color:#FF00CC">{{ baby['birthday'] }}</span>
+                <br>寄语: &nbsp;
+                <span style="color:#FF00CC">{{ baby['introduce'] }}</span>
+            </p>
+        </div>
+    </a>
+    {% endfor%}
     <h3 class="text-center">健康记录</h3>
     {% for healthy in baby_healthy%}
     <a href="{{ url_for('baby.update_healthy',healthy_id=healthy['id']) }}">
     <div class="bg-success img-rounded" style="margin:10px 10px 10px">
-        <p style="font-size:16px;">记录日期: &nbsp;
+        <p style="font-size:16px;margin:10px 10px 10px 20px">记录日期: &nbsp;
         <span style="color:#FF00CC">{{ healthy['record_date'] }}</span>
         <br>身高: &nbsp;
         <span style="color:#FF00CC">{{ healthy['height'] }}&nbsp;cm</span>
@@ -23,7 +44,7 @@
     </a>
     {% endfor%}
     <div class="carousel-inner" style="text-align:center;margin:10px 0px 10px">
-        <img style="max-height:300px" src="../static/{{img_name}}" />
+        <img class="img-rounded" style="max-height:300px" src="../static/img/a1.jpg" />
     </div>
 </div>
 {% endblock %}

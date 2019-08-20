@@ -1,12 +1,61 @@
 {% extends 'base_baby.html' %}
 
 <h1>{% block title %}我的{% endblock %}</h1>
-{% block style %}
-.ele-center{text-align:center}
-{% endblock %}
+
 {% block pageName %}我的宝贝{% endblock %}
 {% block content %}
 <div class="row clearfix bg-primary img-rounded" style="margin:50px 10px 15px">
-
+    <form class="form-horizontal" style="margin:20px 10px 10px" method="post"
+          action="{{ url_for('baby.update_baby_info',baby_id=baby_info['id']) }}" >
+        <div class="form-group">
+            <label for="babyName" class="col-xs-3 input-lg">姓名</label>
+            <div class="col-xs-9">
+                <input type="text" class="form-control input-lg"
+                       placeholder="请输入宝宝姓名" name="babyName"
+                       id="babyName" value="{{ request.form['babyName'] or baby_info['baby_name'] }}" required/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="birthday" class="col-xs-3 input-lg">生日</label>
+            <div class="col-xs-9">
+                <input type="date" class="form-control input-lg"
+                       placeholder="请输入宝宝生日" name="birthday"
+                       id="birthday" value="{{ request.form['birthday'] or baby_info['birthday'] }}" required/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="babySex" class="col-xs-3  input-lg">性别</label>
+            <div class="col-xs-9  input-lg text-left">
+                {% if baby_info['baby_sex']==1 %}
+                <label class="radio-inline">
+                    <input type="radio" name="babySex" id="babySex1" value="1" checked> 男
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="babySex" id="babySex2" value="2"> 女
+                </label>
+                {% else %}
+                <label class="radio-inline">
+                    <input type="radio" name="babySex" id="babySex1" value="1"> 男
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="babySex" id="babySex2" value="2" checked> 女
+                </label>
+                {% endif %}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="introduce" class="col-xs-3 input-lg">寄语</label>
+            <div class="col-xs-9">
+                <textarea class="form-control input-lg" placeholder="宝贝寄语" name="introduce" id="introduce">
+                    {{ request.form['introduce'] or baby_info['introduce']}}</textarea>
+            </div>
+        </div>
+        <div class="form-group text-center">
+            <a href="{{ url_for('baby.home')}}">
+                <button type="button" class="btn btn-default btn-lg" data-dismiss="modal">关闭</button>
+            </a>
+            <button type="submit" class="btn btn-primary btn-lg">提交</button>
+        </div>
+    </form>
 </div>
 {% endblock %}

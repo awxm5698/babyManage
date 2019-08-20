@@ -1,43 +1,44 @@
 {% extends 'base_baby.html' %}
 
-<h1>{% block title %}我的{% endblock %}</h1>
-{% block style %}
-.ele-center{text-align:center}
-{% endblock %}
+<h1>{% block title %}日记{% endblock %}</h1>
+
 {% block pageName %}日记更新{% endblock %}
 {% block content %}
 <div class="row clearfix bg-primary img-rounded" style="margin:50px 10px 15px">
-    <form role="form" class="form-block"
-          action="{{ url_for('baby.diary_update',diary_id=diary['id']) }}" method="post">
+    <form role="form" class="form-horizontal"  style="margin:20px 10px 10px"
+          action="{{ url_for('baby.update_diary',diary_id=diary['id']) }}" method="post">
         <div class="form-group">
-            <label for="record_date"></label>
-            <input type="text" class="form-control input-lg"
-                   placeholder="请输入日期，例如：2019-07-11" name="record_date"
-                   id="record_date" value="{{ request.form['record_date'] or diary['record_date'] }}" required/>
+            <label for="record_date" class="col-xs-3 input-lg">日期</label>
+            <div class="col-xs-9">
+                <input type="date" class="form-control input-lg"
+                       placeholder="请输入日期，例如：2019-07-11" name="record_date"
+                       id="record_date" value="{{ request.form['record_date'] or diary['record_date'] }}" required/>
+            </div>
         </div>
         <div class="form-group">
-            <label for="diary"></label>
-            <textarea type="text" class="form-control input-lg"
-                      placeholder="请输入日志内容,30字以内" name="diary"
-                      id="diary" >{{ request.form['diary']  or diary['diary'] }}</textarea>
+            <label for="diary" class="col-xs-3 input-lg">日记</label>
+            <div class="col-xs-9">
+                        <textarea type="text" class="form-control input-lg"
+                                  placeholder="请输入日记内容,30字以内" name="diary"
+                                  id="diary">{{ request.form['diary']  or diary['diary'] }}</textarea>
+            </div>
         </div>
         <div class="form-group">
             <label for="recordBy" class="col-xs-3 input-lg">记录人</label>
             <div class="col-xs-9">
                 <select class="col-xs-9 input-lg" name="recordBy" id="recordBy">
-                    <!--<option class="input-lg" value="{{ request.form['record_by']  or diary['record_by'] }}">-->
-                        <!--{{ request.form['record_by']  or diary['record_by'] }}</option>-->
-                    <option class="input-lg" value="爸爸">爸爸</option>
-                    <option class="input-lg"  value="妈妈">妈妈</option>
+                    <option class="input-lg">爸爸</option>
+                    <option class="input-lg">妈妈</option>
                 </select>
             </div>
         </div>
-        <div  class="form-group" >
+        <div class="form-group text-center">
             <label></label>
-            <button type="submit" class="btn btn-block btn-lg">提交</button>
             <a href="{{ url_for('baby.diary') }}">
-                <button type="button" class="btn btn-block btn-lg">取消</button></a>
+                <button type="button" class="btn btn-default btn-lg" data-dismiss="modal">关闭</button>
+            </a>
 
+            <button type="submit" class="btn btn-primary btn-lg">提交</button>
         </div>
 
     </form>
