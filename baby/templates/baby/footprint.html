@@ -7,11 +7,11 @@
 <div class="row clearfix img-rounded" style="margin:50px 10px 10px">
     {% for footprint in footprints %}
     <div class="col-xs-6 text-center" style="margin:10px 0px 10px">
-        <a href="{{ url_for('baby.footprint_detail',footprint_id=footprint['id'])}}">
+        <a href="{{ url_for('baby.footprint_detail',footprint_id=footprint['id'],page=1,page_size=6) }}">
             {% if footprint['footprint_img'] == None %}
             <img style="weight:150px;height:150px" src="../static/img/s3.jpg" class="img-circle"/>
             {% else %}
-            <img style="weight:150px;height:150px" src="{{ g.config['img_path'] }}{{footprint['footprint_img']}}" class="img-circle"/>
+            <img style="weight:150px;height:150px" src="{{ url_for('static',filename=footprint['footprint_img'])}}" class="img-circle"/>
             {% endif%}
         </a>
         <a href="{{ url_for('baby.update_footprint',footprint_id=footprint['id'])}}">

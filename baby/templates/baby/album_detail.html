@@ -1,69 +1,30 @@
 {% extends 'base_baby.html' %}
 
 <h1>{% block title %}相册{% endblock %}</h1>
-{% block pageName %}编辑照片{% endblock %}
+{% block pageName %}照片详情{% endblock %}
 {% block content %}
 
-<div class="row img-rounded" style="margin:50px 10px 50px">
-    <form action="{{ url_for('baby.album_update',album_id=photo['id'])}}"
-          method="post" class="form-horizontal">
-        <div class="form-group">
-            <label for="recordDate" class="col-xs-3 input-lg date-picker">日期</label>
-            <input name="recordDate" id="recordDate" class="col-xs-9 input-lg"
-                   type="date" value="{{ photo['record_date'] }}" required/>
-        </div>
-        <div class="form-group">
-            <label for="footprint" class="col-xs-3 input-lg">足迹</label>
-            <select name="footprint" id="footprint" class="col-xs-9 input-lg" required>
-                {% for footprint in footprints %}
-                {% if footprint.id==photo['footprint'] %}
-                <option value="{{ footprint.id }}" selected>{{footprint.footprint_name}}</option>
-                {% else %}
-                <option value="{{ footprint.id }}">{{footprint.footprint_name}}</option>
-                {% endif %}
-                {% endfor %}
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="title" class="col-xs-3 input-lg">主题</label>
-            <input name="title" id="title" class="col-xs-9 input-lg"
-                   type="text" placeholder="其输入主题" value="{{ photo['record_date'] }}"/>
-        </div>
-        <div class="form-group">
-            <label for="body" class="col-xs-3 input-lg">描述</label>
-            <textarea name="body" id="body" class="col-xs-9 input-lg"
-                      placeholder="请输入照片描述">{{ photo['record_date'] }}</textarea>
-        </div>
-        <div class="form-group text-center">
-            <a href="../{{ g.config['img_path'] }}{{photo['img_path']}}">
-                <img src="../{{ g.config['img_path'] }}{{photo['img_path']}}"
-                     class="img-rounded" style="width:200px;height:200px;"/></a>
-        </div>
-        <button type="submit" class="btn btn-block btn-lg">保存</button>
-    </form>
-    <div class="row clearfix img-rounded" style="margin:10px 0px 10px;height:auto">
-        <div class="text-center">
-            <button class="btn btn-lg btn-block bg-danger"
-                    data-toggle="modal" data-target="#deleteAlbum">删除
-            </button>
-        </div>
+<div class="row img-rounded" style="margin:50px 10px 10px">
+    {% if photo['file_type']==0 %}
+    <div class="text-center " style="max-weight:300px;max-height:450px;overflow: scroll">
+    <img src="{{ url_for('static',filename=photo['img_path'])}}"/>
+    {% else %}
+    <video class="text-center" controls>
+        <source src="{{ url_for('static',filename=photo['img_path'])}}" type="video/mp4">
+    </video>
     </div>
+    {% endif %}
+    <br>
 </div>
-<div class="modal fade" id="deleteAlbum" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title input-lg" id="myModalLabel">温馨提示</h4>
-            </div>
-            <div class="modal-body input-lg">确定删除该图片吗？</div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-block btn-lg " data-dismiss="modal">取消</button>
-                <form action="{{ url_for('baby.album_delete', album_id=photo['id']) }}" method="post">
-                    <button class="btn btn-lg btn-block bg-danger" type="submit">确定</button>
-                </form>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal -->
+    <div class="text-left" style="margin:20px 20px 10px">
+    <p>足迹：<span class="text-left">{{footprint['footprint_name']}}@{{footprint['record_date']}}</span>
+        <br>名称：<span class="text-left">{{photo['title']}}</span>
+        <br>描述：<span class="text-left">{{photo['title']}}</span>
+        <br>日期：<span class="text-right">{{photo['record_date']}}</span></p>
+</div>
+    <div class="col-xs-12 text-center" style="margin:10px 0 50px">
+        <input type="button" class="btn btn-lg"
+               onclick="javascript:history.back(-1);" value="返回">
+    </div>
 </div>
 {% endblock %}

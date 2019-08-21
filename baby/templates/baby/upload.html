@@ -21,9 +21,9 @@
             </select>
         </div>
         <div class="form-group">
-            <label for="title" class="col-xs-3 input-lg">主题</label>
+            <label for="title" class="col-xs-3 input-lg">名称</label>
             <input name="title" id="title" class="col-xs-9 input-lg"
-                   type="text" placeholder="请输入主题"/>
+                   type="text" placeholder="请输入照片名称"/>
         </div>
         <div class="form-group">
             <label for="body" class="col-xs-3 input-lg">描述</label>
@@ -31,12 +31,14 @@
                       placeholder="请输入照片描述"></textarea>
         </div>
         <div class="form-group">
-            <label for="inputFile" class="input-lg">其选择您要上传的图片</label>
+            <label for="inputFile" class="input-lg">请选择您要上传的图片</label>
             <input type="file" id="inputFile" name="inputFile" class="input-lg" required>
         </div>
-
-        <button type="submit" class="btn btn-block btn-lg">保存</button>
-
+        <div class="form-group text-center">
+            <input type="button" class="btn btn-lg"
+                   onclick="javascript:history.back(-1);" value="返回">
+        <button type="submit" class="btn btn-lg" onclick="loading()">保存</button>
+        </div>
     </form>
     {% for message in get_flashed_messages() %}
     {% if message=="Success" %}
@@ -48,7 +50,7 @@
             </h4> <strong>上传成功!</strong>您可以继续上传下一张图片
         </div>
     </div>
-    {% else%}
+    {% elif message=='error' %}
     <div class="flash">
         <div class="alert alert-success alert-dismissable" style="margin:20px 0px 10px">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
@@ -58,8 +60,19 @@
         </div>
     </div>
     {% endif %}
-
     {% endfor %}
+</div>
+<div class="modal fade" id="loading" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop='static'>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">提示</h4>
+            </div>
+            <div class="modal-body">
+                文件上传中，请稍候... ...<span id="result"></span>
+            </div>
+        </div>
+    </div>
 </div>
 <script>
     $(document).ready(function () {
@@ -68,6 +81,19 @@
         var month = ("0" + (time.getMonth() + 1)).slice(-2);
         var today = time.getFullYear() + "-" + (month) + "-" + (day);
         $('.date-picker').val(today);
-    })
+    });
+    window.setTimeout(function(){
+    $('.alert').alert('close');},3000);
+    function loading(){
+    fileName = $('#inputFile').val()
+    if (fileName!=""){
+        //显示loading
+        $('#loading').modal('show');
+        //等待提示出现，隐藏loading
+        alert = $('.alert')
+        if(alert.is(':visible')){
+        setTimeout(function(){
+                $("#loading").modal("hide")},1000);
+        }}};
 </script>
 {% endblock %}

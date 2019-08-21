@@ -74,9 +74,12 @@
 {% endif %}
 <div class="row clearfix bg-primary img-rounded" style="margin:10px 10px 15px;height:auto">
     <div class="col-xs-12 text-center" style="margin:10px 0 10px">
-        <a href="{{ url_for('auth.logout') }}">
-            <button type="button" class="btn btn-lg btn-block">退出</button>
-        </a>
+        <!--<a href="{{ url_for('auth.logout') }}">-->
+        <!--<button type="button" class="btn btn-lg btn-block">退出</button>-->
+        <!--</a>-->
+        <button class="btn btn-lg btn-block"
+                data-toggle="modal" data-target="#logoutModal">退出
+        </button>
     </div>
 </div>
 </div>
@@ -211,9 +214,9 @@
                 <div class="form-group">
                     <label for="remarks" class="col-xs-3 input-lg">备注</label>
                     <div class="col-xs-9">
-                        <input type="text" class="form-control input-lg"
-                               placeholder="请输入备注信息" name="remarks"
-                               id="remarks" value="{{ request.form['remarks'] }}"/>
+                        <textarea class="form-control input-lg"
+                                  placeholder="请输入备注信息" name="remarks"
+                                  id="remarks">{{ request.form['remarks'] }}</textarea>
                     </div>
                 </div>
                 <div class="form-group">
@@ -280,6 +283,23 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
 </div>
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title input-lg" id="myModalLabel">温馨提示</h4>
+            </div>
+            <div class="modal-body input-lg">确定要退出登录吗？</div>
+            <div class="modal-footer text-center">
+                <button type="button" class="btn btn-lg " data-dismiss="modal">取消</button>
+                <a href="{{ url_for('auth.logout') }}">
+                    <button class="btn btn-lg" type="submit">确定</button>
+                </a>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
 <div class="row clearfix " style="margin:30px 10px 40px">
 </div>
 <script>
@@ -290,6 +310,7 @@
         var today = time.getFullYear() + "-" + (month) + "-" + (day);
         $('.date-picker').val(today);
     })
+
 
 
 </script>

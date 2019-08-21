@@ -118,10 +118,14 @@
 --insert into relative (call_name) values ('妈妈');
 
 --2019-08-20
-insert into config (key,value) values ('img_extensions',"['png', 'jpg', 'jpeg', 'gif']");
-insert into config (key,value) values ('video_extensions',"['mp4']");
-alter table manage_footprint add column footprint_img character default null;
-alter table manage_healthy add column is_deleted integer default  0;
-alter table manage_album add column file_type integer default 0;
+--insert into config (key,value) values ('img_extensions',"['png', 'jpg', 'jpeg', 'gif']");
+--insert into config (key,value) values ('video_extensions',"['mp4']");
+--alter table manage_footprint add column footprint_img character default null;
+--alter table manage_healthy add column is_deleted integer default  0;
+--alter table manage_album add column file_type integer default 0;
+
+--2019-08-21
+alter table relative add column birthday date default null;
+update manage_album set img_path='upload/'||img_path where img_path not like 'upload/%';
 
 

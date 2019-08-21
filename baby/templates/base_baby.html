@@ -31,11 +31,11 @@
         <div style="width: 100%;margin: auto;">
             <div class="baby_nav_foot">
                 <a class="btn btn-block btn-lg"
-                   href="{{ url_for('baby.diary') }}">日记</a>
+                   href="{{ url_for('baby.diary',page=1,page_size=5) }}">日记</a>
             </div>
             <div class="baby_nav_foot">
                 <a class="btn btn-block btn-lg"
-                   href="{{ url_for('baby.album') }}">相册</a>
+                   href="{{ url_for('baby.album',page=1,page_size=6) }}">相册</a>
             </div>
             <div class="baby_nav_foot">
                 <a class="btn btn-block btn-lg"

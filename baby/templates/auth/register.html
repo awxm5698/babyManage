@@ -4,13 +4,9 @@
 
 {% block content %}
 <body style="height:100%">
-<div style="margin:20px 20px 0px">
-    <a href="{{ url_for('auth.login') }}"
-       class="fa fa-reply fa-lg" aria-hidden="true">&nbsp; 返回</a>
-</div>
 
 <div class="container" style="text-align:center">
-    <div style="margin:10px 10px 20px">
+    <div style="margin:30px 10px 20px">
         <div class="carousel-inner"  style="max-height:100px">
             <div class="item active" id="login-logo">
                 <img  alt="" src="../static/img/610x610-01.jpg" />
@@ -51,7 +47,9 @@
             <div></div>
             <div  class="form-group" >
                 <label></label>
-                <button type="submit" class="btn btn-block btn-lg">立即注册</button>
+                <input type="button" class="btn btn-lg"
+                       onclick="javascript:history.back(-1);" value="返回">
+                <button type="submit" class="btn btn-lg">立即注册</button>
             </div>
 
         </form>

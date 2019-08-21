@@ -21,6 +21,12 @@
                 {% endif %}
                 <br>生日: &nbsp;
                 <span style="color:#FF00CC">{{ baby['birthday'] }}</span>
+                <br>年龄: &nbsp;
+                {% for age in ages %}
+                {% if age['id']== baby['id'] %}
+                <span style="color:#FF00CC">{{age['age']}}</span>
+                {% endif %}
+                {% endfor %}
                 <br>寄语: &nbsp;
                 <span style="color:#FF00CC">{{ baby['introduce'] }}</span>
             </p>

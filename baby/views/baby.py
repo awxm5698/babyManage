@@ -1,6 +1,7 @@
 import os
 import hashlib
 import time
+import datetime
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, url_for
 )
@@ -18,7 +19,19 @@ baby_model = BabyModel()
 def home():
     baby_healthy = baby_model.get_baby_healthy(get_db(), g.user['id'])
     baby_info = baby_model.get_baby_info(get_db(), g.user['id'])
-    return render_template('baby/home.html', baby_healthy=baby_healthy, baby_info=baby_info)
+    ages = []
+    for baby in baby_info:
+        birthday = baby['birthday']
+        date1 = time.strptime(birthday, "%Y-%m-%d")
+        date2 = time.strptime(datetime.datetime.now().strftime("%Y-%m-%d"), "%Y-%m-%d")
+        age = "{}岁{}月{}天({}天)".format(date2.tm_year-date1.tm_year,
+                                         date2.tm_mon-date1.tm_mon,
+                                         date2.tm_mday-date1.tm_mday,
+                                         date2.tm_yday-date1.tm_yday)
+        info = {"id": baby['id'], "age": age}
+        ages.append(info)
+    return render_template('baby/home.html', baby_healthy=baby_healthy,
+                           baby_info=baby_info, ages=ages)
 
 
 @bp.route('/healthy/<int:healthy_id>/detail', methods=('POST', 'GET'))
@@ -42,12 +55,28 @@ def update_healthy(healthy_id):
     return render_template('baby/healthy_detail.html', healthy=healthy)
 
 
-@bp.route('/album')
+@bp.route('/album/page/<int:page>/page_size/<int:page_size>')
 @login_required
-def album():
+def album(page=1, page_size=6):
     photo = get_db().execute('select * from manage_album where is_deleted=0'
-                             ' order by record_date desc').fetchall()
-    return render_template('baby/album.html', photo=photo)
+                             ' order by id desc limit ?,?',
+                             ((page-1)*page_size, page_size)).fetchall()
+    count = get_db().execute('select count(1) as count from manage_album '
+                             ' where is_deleted=0').fetchone()
+    page = {'page': page, 'page_size': page_size,
+            'page_count': len(photo), 'count': count['count']}
+    return render_template('baby/album.html', photo=photo, page=page)
+
+
+@bp.route('/album/<int:album_id>/detail')
+@login_required
+def album_detail(album_id):
+    photo = get_db().execute('select * from manage_album  where id=?',
+                             (album_id,)).fetchone()
+    footprint = get_db().execute('select * from manage_footprint where id = '
+                                 '(select footprint from manage_album where id=?)',
+                                 (album_id,)).fetchone()
+    return render_template('baby/album_detail.html', photo=photo, footprint=footprint)
 
 
 @bp.route('/album/<int:album_id>/update', methods=('POST', 'GET'))
@@ -69,7 +98,7 @@ def album_update(album_id):
                        (title, body, footprint, record_date, album_id))
             db.commit()
             return redirect(url_for('baby.album'))
-    return render_template('baby/album_detail.html', footprints=footprints, photo=photo)
+    return render_template('baby/album_update.html', footprints=footprints, photo=photo)
 
 
 @bp.route('/album/<int:album_id>/delete', methods=('POST',))
@@ -102,11 +131,12 @@ def add_relative():
     if request.method == 'POST':
         call_name = request.form['call_name']
         really_name = request.form['really_name']
+        birthday = request.form['birthday']
         error = None
         if error is None:
             db = get_db()
-            db.execute('insert into relative (call_name, really_name) values(?,?)',
-                       (call_name, really_name))
+            db.execute('insert into relative (call_name, really_name, birthday) values(?,?,?)',
+                       (call_name, really_name, birthday))
             db.commit()
             return redirect(url_for('baby.relative'))
 
@@ -119,11 +149,12 @@ def update_relative(relative_id):
     if request.method == 'POST':
         call_name = request.form['call_name']
         really_name = request.form['really_name']
+        birthday = request.form['birthday']
         error = None
         if error is None:
             db = get_db()
-            db.execute('update relative set call_name=?, really_name=? where id=?',
-                       (call_name, really_name, relative_id))
+            db.execute('update relative set call_name=?, really_name=?, birthday=? where id=?',
+                       (call_name, really_name, birthday, relative_id))
             db.commit()
             return redirect(url_for('baby.relative'))
     return render_template('baby/mine_relative_detail.html', relative=my_relative)
@@ -136,22 +167,39 @@ def footprint():
     return render_template('baby/footprint.html', footprints=footprints)
 
 
-@bp.route('/footprint/<int:footprint_id>/detail')
+@bp.route('/footprint/<int:footprint_id>/detail/page/<int:page>/page_size/<int:page_size>')
 @login_required
-def footprint_detail(footprint_id):
+def footprint_detail(footprint_id, page, page_size):
     footprint = get_db().execute('select * from manage_footprint where id=? ',
                                  (footprint_id,)).fetchone()
-    photo = get_db().execute('select * from manage_album where footprint=? '
-                             ' order by record_date desc',
-                             (footprint_id,)).fetchall()
-    return render_template('baby/footprint_detail.html', footprint=footprint, photo=photo)
+    photo = get_db().execute('select * from manage_album where footprint=? and is_deleted=0'
+                             ' order by id desc limit ?,?',
+                             (footprint_id, (page-1)*page_size, page_size)).fetchall()
+    count = get_db().execute('select count(1) as count from manage_album '
+                             ' where is_deleted=0 and footprint=?',
+                             (footprint_id,)).fetchone()
+    page = {'page': page, 'page_size': page_size,
+            'page_count': len(photo), 'count': count['count']}
+
+    return render_template('baby/footprint_detail.html',
+                           footprint=footprint,
+                           photo=photo,
+                           page=page)
 
 
-@bp.route('/diary')
+@bp.route('/diary/page/<int:page>/page_size/<int:page_size>')
 @login_required
-def diary():
-    baby_diary = baby_model.get_baby_diary(get_db(), g.user['id'])
-    return render_template('baby/diary.html', baby_diary=baby_diary)
+def diary(page, page_size):
+    baby_diary = get_db().execute('select * from manage_diary where create_by = ? '
+                                  ' and is_deleted=0 order by record_date desc '
+                                  ' limit ?,?', (g.user['id'], (page-1)*page_size, page_size)).fetchall()
+    count = get_db().execute('select count(1) as count '
+                             ' from manage_diary').fetchone()
+    page = {'page': page, 'page_size': page_size,
+            'page_count': len(baby_diary), 'count': count['count']}
+    return render_template('baby/diary.html',
+                           baby_diary=baby_diary,
+                           page=page)
 
 
 @bp.route('/diary/<int:diary_id>/update', methods=('GET', 'POST'))
@@ -168,7 +216,7 @@ def update_diary(diary_id):
             db.execute('update manage_diary set record_date=?, diary=? where id=?',
                        (record_date, diary, diary_id))
             db.commit()
-            return redirect(url_for('baby.diary'))
+            return redirect(url_for('baby.diary', page=1, page_size=5))
     return render_template('baby/diary_detail.html', diary=diary)
 
 
@@ -271,16 +319,16 @@ def update_footprint(footprint_id):
             upload_path = os.path.join(g.config['upload_path'], 'upload')
             results = upload_file(upload_path, footprint_img)
             if results.get('status') == 'success':
-                filename = results.get('filename')
+                footprint_img = '{}/{}'.format('upload', results.get('filename'))
             else:
                 error = results.get('msg')
                 flash(error)
         else:
-            filename = footprint_info['footprint_img']
+            footprint_img = footprint_info['footprint_img']
 
         if error is None:
             db = get_db()
-            baby_model.update_footprint(db, footprint_id, record_date, footprint_name, footprint_desc, filename)
+            baby_model.update_footprint(db, footprint_id, record_date, footprint_name, footprint_desc, footprint_img)
             return redirect(url_for('baby.footprint'))
     return render_template('baby/footprint_update.html', footprint_info=footprint_info)
 
@@ -333,7 +381,7 @@ def upload():
         upload_path = os.path.join(g.config['upload_path'], 'upload')
         results = upload_file(upload_path, file)
         if results.get('status') == 'success':
-            filename = results.get('filename')
+            img_path = '{}/{}'.format('upload', results.get('filename'))
             file_type = results.get('file_type')
         else:
             error = results.get('msg')
@@ -344,7 +392,7 @@ def upload():
                        'img_path,record_date,create_by,file_type) '
                        'values(?,?,?,?,?,?,?,?)',
                        (baby_id, title, body, footprint,
-                        filename, record_date, g.user['id'], file_type))
+                        img_path, record_date, g.user['id'], file_type))
             db.commit()
             error = 'Success'
             flash(error)
