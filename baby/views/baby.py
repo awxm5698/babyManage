@@ -5,8 +5,6 @@ import datetime
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, url_for
 )
-# from werkzeug.exceptions import abort
-# from werkzeug import secure_filename
 from .auth import login_required
 from baby.db import get_db
 from baby.model.baby_model import BabyModel
@@ -97,7 +95,7 @@ def album_update(album_id):
                        'record_date=? where id=?',
                        (title, body, footprint, record_date, album_id))
             db.commit()
-            return redirect(url_for('baby.album'))
+            return redirect(url_for('baby.album', page=1, page_size=6))
     return render_template('baby/album_update.html', footprints=footprints, photo=photo)
 
 
@@ -107,7 +105,7 @@ def album_delete(album_id):
     if request.method == 'POST':
         get_db().execute('update manage_album set is_deleted=1 where id=?', (album_id,))
         get_db().commit()
-        return redirect(url_for('baby.album'))
+        return redirect(url_for('baby.album', page=1, page_size=6))
 
 
 @bp.route('/mine')
