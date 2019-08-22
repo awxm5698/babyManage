@@ -125,7 +125,14 @@
 --alter table manage_album add column file_type integer default 0;
 
 --2019-08-21
-alter table relative add column birthday date default null;
-update manage_album set img_path='upload/'||img_path where img_path not like 'upload/%';
+--alter table relative add column birthday date default null;
+--update manage_album set img_path='upload/'||img_path where img_path not like 'upload/%';
 
+--2019-08-22
+alter table manage_album add column small_img_path character default null;
+alter table manage_album add column large_img_path character default null;
+UPDATE manage_album SET small_img_path ='upload/small' ||  substr(img_path, 7)
+WHERE img_path LIKE "upload/%";
+UPDATE manage_album SET large_img_path ='upload/large' ||  substr(img_path, 7)
+WHERE img_path LIKE "upload/%";
 

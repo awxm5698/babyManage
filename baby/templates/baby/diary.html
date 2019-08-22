@@ -21,29 +21,39 @@
                     {{ diary['diary'] }}</p>
             </div>
 
-            <h5 class="text-right" style="color:#F8F8F8"> -- 来自<span style="color:#33FF00">{{ diary['record_by'] }}</span>的记录</h5>
+            <h5 class="text-right" style="color:#F8F8F8"> -- 来自<span
+                    style="color:#33FF00">{{ diary['record_by'] }}</span>的记录</h5>
         </div>
     </a>
 </div>
 {% endfor%}
 <div class="row clearfix " style="margin:30px 10px 40px">
 </div>
-{% if page['page_count']<=5 and page['page'] !=1 %}
-<div class="navbar navbar-fixed-bottom text-right">
-    <a href="{{ url_for('baby.diary',page=page['page']-1,page_size=5) }}">
-        <button class="" style="margin:10px 30px 120px">
-            <i class="fa fa-chevron-up fa-2x" aria-hidden="true"></i>
+<div class="center-right">
+    {% if page['page'] !=1 %}
+    <div style="position:fixed;top:200px;right:5px">
+        <a href="{{ url_for('baby.diary',page=page['page']-1,page_size=5) }}">
+            <button class="" style="margin:10px 10px 10px">
+                <i class="fa fa-chevron-up fa-2x" aria-hidden="true"></i>
+            </button>
+        </a>
+    </div>
+    {% endif %}
+    {% if page['all_page'] !=0 %}
+    <div style="position:fixed;top:250px;right:5px">
+        <button class="btn" style="margin:10px 10px 10px">
+            {{page['page']}}/{{page['all_page']}}
         </button>
-    </a>
-</div>
-{% endif %}
-{% if page['page_count']==5 and page['page_count'] < page['count'] %}
-<div class="navbar navbar-fixed-bottom text-right">
-    <a href="{{ url_for('baby.diary',page=page['page']+1,page_size=5) }}">
-        <button class="" style="margin:10px 30px 70px">
-            <i class="fa fa-chevron-down fa-2x" aria-hidden="true"></i>
-        </button>
-    </a>
+    </div>
+    {% endif %}
+    {% if page['page'] < page['all_page'] %}
+    <div style="position:fixed;top:300px;right:5px">
+        <a href="{{ url_for('baby.diary',page=page['page']+1,page_size=5) }}">
+            <button class="" style="margin:10px 10px 10px">
+                <i class="fa fa-chevron-down fa-2x" aria-hidden="true"></i>
+            </button>
+        </a>
+    </div>
 </div>
 {% endif %}
 {% endblock %}

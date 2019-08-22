@@ -6,25 +6,30 @@
 
 <div class="row img-rounded" style="margin:50px 10px 10px">
     {% if photo['file_type']==0 %}
-    <div class="text-center " style="max-weight:300px;max-height:450px;overflow: scroll">
-    <img src="{{ url_for('static',filename=photo['img_path'])}}"/>
-    {% else %}
-    <video class="text-center" controls>
-        <source src="{{ url_for('static',filename=photo['img_path'])}}" type="video/mp4">
-    </video>
+    <div class="text-center " style="max-weight:300px;max-height:300px;overflow: scroll">
+        <img src="{{ url_for('static',filename=photo['large_img_path'])}}"/>
+        {% else %}
+        <video class="text-center" controls>
+            <source src="{{ url_for('static',filename=photo['img_path'])}}" type="video/mp4">
+        </video>
     </div>
     {% endif %}
     <br>
 </div>
-    <div class="text-left" style="margin:20px 20px 10px">
+<div class="text-left" style="margin:20px 20px 10px">
     <p>足迹：<span class="text-left">{{footprint['footprint_name']}}@{{footprint['record_date']}}</span>
         <br>名称：<span class="text-left">{{photo['title']}}</span>
-        <br>描述：<span class="text-left">{{photo['title']}}</span>
+        <br>描述：<span class="text-left">{{photo['body']}}</span>
         <br>日期：<span class="text-right">{{photo['record_date']}}</span></p>
 </div>
-    <div class="col-xs-12 text-center" style="margin:10px 0 50px">
-        <input type="button" class="btn btn-lg"
-               onclick="javascript:history.back(-1);" value="返回">
-    </div>
+<div class="col-xs-12 text-center" style="margin:10px 0 50px">
+    <a href="{{ url_for('static',filename=photo['img_path'])}}"
+       download="{{ photo['img_path'].split('/')[-1] }}">点击下载原图</a>
+</div>
+
+
+<div class="col-xs-12 text-center" style="margin:10px 0 50px">
+    <input type="button" class="btn btn-lg"
+           onclick="javascript:history.back(-1);" value="返回">
 </div>
 {% endblock %}

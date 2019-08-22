@@ -1,4 +1,4 @@
-import os
+import math
 import hashlib
 import time
 import datetime
@@ -8,6 +8,7 @@ from flask import (
 from .auth import login_required
 from baby.db import get_db
 from baby.model.baby_model import BabyModel
+from baby.model.file_model import FileModel
 bp = Blueprint('baby', __name__)
 baby_model = BabyModel()
 
@@ -23,9 +24,9 @@ def home():
         date1 = time.strptime(birthday, "%Y-%m-%d")
         date2 = time.strptime(datetime.datetime.now().strftime("%Y-%m-%d"), "%Y-%m-%d")
         age = "{}岁{}月{}天({}天)".format(date2.tm_year-date1.tm_year,
-                                         date2.tm_mon-date1.tm_mon,
-                                         date2.tm_mday-date1.tm_mday,
-                                         date2.tm_yday-date1.tm_yday)
+                                      date2.tm_mon-date1.tm_mon,
+                                      date2.tm_mday-date1.tm_mday,
+                                      date2.tm_yday-date1.tm_yday)
         info = {"id": baby['id'], "age": age}
         ages.append(info)
     return render_template('baby/home.html', baby_healthy=baby_healthy,
@@ -61,7 +62,7 @@ def album(page=1, page_size=6):
                              ((page-1)*page_size, page_size)).fetchall()
     count = get_db().execute('select count(1) as count from manage_album '
                              ' where is_deleted=0').fetchone()
-    page = {'page': page, 'page_size': page_size,
+    page = {'page': page, 'page_size': page_size, 'all_page': math.ceil(count['count']/page_size),
             'page_count': len(photo), 'count': count['count']}
     return render_template('baby/album.html', photo=photo, page=page)
 
@@ -176,7 +177,7 @@ def footprint_detail(footprint_id, page, page_size):
     count = get_db().execute('select count(1) as count from manage_album '
                              ' where is_deleted=0 and footprint=?',
                              (footprint_id,)).fetchone()
-    page = {'page': page, 'page_size': page_size,
+    page = {'page': page, 'page_size': page_size, 'all_page': math.ceil(count['count']/page_size),
             'page_count': len(photo), 'count': count['count']}
 
     return render_template('baby/footprint_detail.html',
@@ -193,7 +194,7 @@ def diary(page, page_size):
                                   ' limit ?,?', (g.user['id'], (page-1)*page_size, page_size)).fetchall()
     count = get_db().execute('select count(1) as count '
                              ' from manage_diary').fetchone()
-    page = {'page': page, 'page_size': page_size,
+    page = {'page': page, 'page_size': page_size, 'all_page': math.ceil(count['count']/page_size),
             'page_count': len(baby_diary), 'count': count['count']}
     return render_template('baby/diary.html',
                            baby_diary=baby_diary,
@@ -282,29 +283,33 @@ def add_baby_healthy():
 @bp.route('/add/footprint', methods=('POST',))
 @login_required
 def add_footprint():
+    file_model = FileModel(g.config['upload_path'])
     if request.method == 'POST':
         record_date = request.form['record_date']
         footprint_name = request.form['footprint_name']
         footprint_desc = request.form['footprint_desc']
         footprint_img = request.files['inputFile']
         error = None
-        upload_path = os.path.join(g.config['upload_path'], 'upload')
-        results = upload_file(upload_path, footprint_img)
-        if results.get('status') == 'success':
-            filename = results.get('filename')
+        # upload_path = os.path.join(g.config['upload_path'], 'upload')
+        results = file_model.upload_file(footprint_img,
+                                         g.config['img_extensions'],
+                                         g.config['video_extensions'])
+        if results['status'] == 'success':
+            footprint_img = '{}/{}'.format('upload/small/', results['filename'])
         else:
-            error = results.get('msg')
+            error = results['msg']
             flash(error)
 
         if error is None:
             db = get_db()
-            baby_model.add_footprint(db, g.user['id'], record_date, footprint_name, footprint_desc, filename)
+            baby_model.add_footprint(db, g.user['id'], record_date, footprint_name, footprint_desc, footprint_img)
             return redirect(url_for('baby.mine'))
 
 
 @bp.route('/update/<int:footprint_id>/footprint', methods=('POST','GET'))
 @login_required
 def update_footprint(footprint_id):
+    file_model = FileModel(g.config['upload_path'])
     footprint_info = get_db().execute('select * from manage_footprint where id=?',
                                       (footprint_id,)).fetchone()
     if request.method == 'POST':
@@ -314,12 +319,14 @@ def update_footprint(footprint_id):
         footprint_img = request.files['inputFile']
         error = None
         if footprint_img:
-            upload_path = os.path.join(g.config['upload_path'], 'upload')
-            results = upload_file(upload_path, footprint_img)
-            if results.get('status') == 'success':
-                footprint_img = '{}/{}'.format('upload', results.get('filename'))
+            # upload_path = os.path.join(g.config['upload_path'], 'upload')
+            results = file_model.upload_file(footprint_img,
+                                             g.config['img_extensions'],
+                                             g.config['video_extensions'])
+            if results['status'] == 'success':
+                footprint_img = '{}/{}'.format('upload/small/', results['filename'])
             else:
-                error = results.get('msg')
+                error = results['msg']
                 flash(error)
         else:
             footprint_img = footprint_info['footprint_img']
@@ -331,42 +338,10 @@ def update_footprint(footprint_id):
     return render_template('baby/footprint_update.html', footprint_info=footprint_info)
 
 
-def allowed_file(filename):
-    img_extensions = g.config['img_extensions']
-    video_extensions = g.config['video_extensions']
-    file_type = None
-    if '.' in filename and filename.rsplit('.', 1)[-1] in img_extensions:
-        file_type = 0
-    if '.' in filename and filename.rsplit('.', 1)[-1] in video_extensions:
-        file_type = 1
-    return file_type
-
-
-def upload_file(upload_path, file):
-    results = {'msg': '', 'status': '', 'filename': ''}
-    file_type = allowed_file(file.filename)
-    if file and file_type is not None:
-        file_extensions = file.filename.rsplit('.', 1)[-1]
-        now_time = str(time.time()).split('.')[0]
-        filename = '{}-{}.{}'.format(now_time, my_md5(now_time), file_extensions)
-        try:
-            file.save(os.path.join(upload_path, filename))
-            results['status'] = 'success'
-            results['msg'] = '上传成功'
-            results['filename'] = filename
-            results['file_type'] = file_type
-        except OSError as e:
-            results['status'] = 'error'
-            results['msg'] = e
-    else:
-        results['status'] = 'error'
-        results['msg'] = '上传文件必须是{}等格式'.format(str(g.config['img_extensions']))
-    return results
-
-
 @bp.route('/upload', methods=('GET', 'POST'))
 @login_required
 def upload():
+    file_model = FileModel(g.config['upload_path'])
     footprints = baby_model.get_footprint(get_db(), g.user['id'])
     baby_id = 1
     if request.method == 'POST':
@@ -376,21 +351,29 @@ def upload():
         body = request.form['body']
         file = request.files['inputFile']
         error = None
-        upload_path = os.path.join(g.config['upload_path'], 'upload')
-        results = upload_file(upload_path, file)
-        if results.get('status') == 'success':
-            img_path = '{}/{}'.format('upload', results.get('filename'))
-            file_type = results.get('file_type')
+        # upload_path = os.path.join(g.config['upload_path'], 'upload')
+        results = file_model.upload_file(file,
+                                         g.config['img_extensions'],
+                                         g.config['video_extensions'])
+        if results['status'] == 'success':
+            file_type = results['file_type']
+            img_path = '{}/{}'.format('upload', results['filename'])
+            small_img_path = ''
+            large_img_path = ''
+            if file_type == 0:
+                small_img_path = '{}/{}'.format('upload/small/', results['filename'])
+                large_img_path = '{}/{}'.format('upload/large/', results['filename'])
         else:
-            error = results.get('msg')
+            error = results['msg']
             flash(error)
         if error is None:
             db = get_db()
             db.execute('insert into manage_album (baby_id,title,body,footprint,'
-                       'img_path,record_date,create_by,file_type) '
-                       'values(?,?,?,?,?,?,?,?)',
+                       'img_path,small_img_path,large_img_path,record_date,'
+                       'create_by,file_type) values(?,?,?,?,?,?,?,?,?,?)',
                        (baby_id, title, body, footprint,
-                        img_path, record_date, g.user['id'], file_type))
+                        img_path, small_img_path, large_img_path, record_date,
+                        g.user['id'], file_type))
             db.commit()
             error = 'Success'
             flash(error)
