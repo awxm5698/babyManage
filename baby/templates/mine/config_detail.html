@@ -6,7 +6,7 @@
 {% block content %}
 <div class="row clearfix img-rounded" style="margin:50px 10px 15px">
     <form role="form" class="form-horizontal"
-          action="{{ url_for('baby.update_config', config_id=this_config['id']) }}"
+          action="{{ url_for('mine.update_config', config_id=this_config['id']) }}"
           method="post" style="margin:10px 10px 10px">
         <div class="form-group">
             <label for="configKey" class="col-xs-3 input-lg">关键字</label>
@@ -41,7 +41,7 @@
     </form>
     <div class="row clearfix img-rounded" style="margin:10px 10px 15px;height:auto">
         <div class="col-xs-12 text-center" style="margin:10px 0 10px">
-            <a href="{{ url_for('baby.config')}}">
+            <a href="{{ url_for('mine.config')}}">
             <button type="button" class="btn btn-default btn-lg" data-dismiss="modal">关闭</button>
         </a>
         </div>
@@ -57,7 +57,7 @@
             <div class="modal-body input-lg">确定删除该配置项吗？</div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-block btn-lg " data-dismiss="modal">取消</button>
-                <form action="{{ url_for('baby.delete_config', config_id=this_config['id']) }}" method="post">
+                <form action="{{ url_for('mine.delete_config', config_id=this_config['id']) }}" method="post">
                     <button class="btn btn-lg btn-block bg-danger" type="submit">确定</button>
                 </form>
             </div>

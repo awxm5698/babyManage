@@ -1,7 +1,6 @@
 import os
 import hashlib
 import time
-import zlib
 import threading
 from PIL import Image
 
@@ -16,7 +15,11 @@ class FileModel:
         self.square_path = os.path.join(self.upload_path, 'square')
         self.video_path = os.path.join(self.upload_path, 'video')
         self.small_size = (150, 150)
-        self.large_size = (300, 300)
+        self.large_size = (350, 350)
+        self.square_kb = 1024
+        self.large_kb = 512
+        self.small_kb = 128
+        self.video_kb = 5120
         if not os.path.exists(self.upload_path):
             os.makedirs(self.upload_path)
         if not os.path.exists(self.video_path):
@@ -27,7 +30,6 @@ class FileModel:
             os.makedirs(self.small_path)
         if not os.path.exists(self.large_path):
             os.makedirs(self.large_path)
-
 
     @staticmethod
     def my_md5(string):
@@ -96,7 +98,7 @@ class FileModel:
                                          img_input.getpixel((i, j)))
             out_path = os.path.join(self.square_path, img_name)
             img_out.save(out_path, 'png', quality=80)
-            self.zip_image(out_path, max_size=500)
+            self.zip_image(out_path, max_size=self.square_kb)
 
     @staticmethod
     def zip_image(img_path, max_size, step=10, quality=80):
@@ -115,7 +117,7 @@ class FileModel:
         img_out = img_input.resize(self.small_size, Image.ANTIALIAS)
         out_path = os.path.join(self.small_path, img_name)
         img_out.save(out_path, 'png', quality=80)
-        self.zip_image(out_path, max_size=25)
+        self.zip_image(out_path, max_size=self.small_kb)
 
     def change_image_large(self, img_name):
         input_path = os.path.join(self.square_path, img_name)
@@ -123,7 +125,7 @@ class FileModel:
         img_out = img_input.resize(self.large_size, Image.ANTIALIAS)
         out_path = os.path.join(self.large_path, img_name)
         img_out.save(out_path, 'png', quality=80)
-        self.zip_image(out_path, max_size=100)
+        self.zip_image(out_path, max_size=self.large_kb)
 
     def change_image_size(self, img_name):
         # 同步变更
@@ -141,7 +143,7 @@ class FileModel:
         video_path = os.path.join(self.upload_path, video_name)
         out_path = os.path.join(self.video_path, video_name)
         video_size = os.path.getsize(video_path) / 1024
-        if video_size >= 10.0:
+        if video_size >= self.video_kb:
             try:
                 compress = "ffmpeg -i {} -r 10 -pix_fmt yuv420p -vcodec libx264 -preset veryslow -profile:v baseline  -crf 23 -acodec aac -b:a 32k -strict -5 {}"\
                     .format(video_path, out_path)

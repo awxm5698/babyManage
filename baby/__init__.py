@@ -3,6 +3,10 @@ from flask import Flask, render_template
 from . import db
 from .views import auth
 from .views import baby
+from .views import album
+from .views import diary
+from .views import footprint
+from .views import mine
 
 
 def create_app(test_config=None):
@@ -35,6 +39,10 @@ def create_app(test_config=None):
     db.init_app(app)
     app.register_blueprint(auth.bp)
     app.register_blueprint(baby.bp)
+    app.register_blueprint(album.bp)
+    app.register_blueprint(diary.bp)
+    app.register_blueprint(footprint.bp)
+    app.register_blueprint(mine.bp)
     app.add_url_rule('/', endpoint='index')
 
     return app

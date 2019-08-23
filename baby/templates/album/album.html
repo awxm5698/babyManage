@@ -8,17 +8,17 @@
     {% for ph in photo%}
     <div class="col-xs-6" style="margin:10px 0px 10px;max-weight:150px;max-height:220px;overflow-x: hidden">
         {% if ph['file_type']==0 %}
-        <a href="{{ url_for('baby.album_detail',album_id=ph['id']) }}">
+        <a href="{{ url_for('album.album_detail',album_id=ph['id']) }}">
             <img src="{{ url_for('static',filename=ph['small_img_path'])}}"
                  class="img-rounded" style="width:150px;height:150px;"/></a>
         {% else %}
-        <a href="{{ url_for('baby.album_detail',album_id=ph['id']) }}">
+        <a href="{{ url_for('album.album_detail',album_id=ph['id']) }}">
             <video style="width:150px;height:150px;" controls>
                 <source src="{{ url_for('static',filename=ph['img_path'])}}" type="video/mp4">
             </video>
         </a>
         {% endif %}
-        <a href="{{ url_for('baby.album_update',album_id=ph['id'])}}">
+        <a href="{{ url_for('album.album_update',album_id=ph['id'])}}">
             <br>
             <p>名称：<span class="text-left">{{ph['title']}}</span>
                 <br>描述：<span class="text-left">{{ph['body']}}</span></p>
@@ -31,14 +31,14 @@
 <div class="center-right">
     {% if page['page'] !=1 %}
     <div style="position:fixed;top:200px;right:5px">
-        <a href="{{ url_for('baby.album',page=page['page']-1,page_size=6) }}">
+        <a href="{{ url_for('album.album',page=page['page']-1,page_size=6) }}">
             <button class="" style="margin:10px 10px 10px">
                 <i class="fa fa-chevron-up fa-2x" aria-hidden="true"></i>
             </button>
         </a>
     </div>
     {% endif %}
-    {% if page['all_page'] !=0 %}
+    {% if page['all_page'] > 1 %}
     <div style="position:fixed;top:250px;right:5px">
         <button class="btn" style="margin:10px 10px 10px">
             {{page['page']}}/{{page['all_page']}}
@@ -47,7 +47,7 @@
     {% endif %}
     {% if page['page'] < page['all_page'] %}
     <div style="position:fixed;top:300px;right:5px">
-        <a href="{{ url_for('baby.album',page=page['page']+1,page_size=6) }}">
+        <a href="{{ url_for('album.album',page=page['page']+1,page_size=6) }}">
             <button class="" style="margin:10px 10px 10px">
                 <i class="fa fa-chevron-down fa-2x" aria-hidden="true"></i>
             </button>

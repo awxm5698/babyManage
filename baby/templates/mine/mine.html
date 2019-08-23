@@ -31,7 +31,7 @@
         </button>
     </div>
     <div class="col-xs-6 text-center" style="margin:10px 0 10px">
-        <a href="{{ url_for('baby.relative')}}">
+        <a href="{{ url_for('mine.relative')}}">
             <button type="button" class="btn btn-lg">我的亲属</button>
         </a>
     </div>
@@ -57,7 +57,7 @@
         </button>
     </div>
     <div class="col-xs-6 text-center" style="margin:10px 0 10px">
-        <a href="{{ url_for('baby.upload')}}">
+        <a href="{{ url_for('album.album_upload')}}">
             <button type="button" class="btn btn-lg">上传文件</button>
         </a>
     </div>
@@ -66,7 +66,7 @@
 {% if g.user['user_level']==0 %}
 <div class="row clearfix bg-primary img-rounded" style="margin:10px 10px 15px;height:auto">
     <div class="col-xs-12 text-center" style="margin:10px 0 10px">
-        <a href="{{ url_for('baby.config') }}">
+        <a href="{{ url_for('mine.config') }}">
             <button type="button" class="btn btn-lg btn-block">配置管理</button>
         </a>
     </div>
@@ -74,9 +74,6 @@
 {% endif %}
 <div class="row clearfix bg-primary img-rounded" style="margin:10px 10px 15px;height:auto">
     <div class="col-xs-12 text-center" style="margin:10px 0 10px">
-        <!--<a href="{{ url_for('auth.logout') }}">-->
-        <!--<button type="button" class="btn btn-lg btn-block">退出</button>-->
-        <!--</a>-->
         <button class="btn btn-lg btn-block"
                 data-toggle="modal" data-target="#logoutModal">退出
         </button>
@@ -93,7 +90,7 @@
                 <h4 class="modal-title" id="myModalLabel">新增足迹</h4>
             </div>
             <form role="form" class="form-horizontal" style="margin:20px 10px 10px"
-                  action="{{ url_for('baby.add_footprint') }}"
+                  action="{{ url_for('footprint.add_footprint') }}"
                   method="post" style="margin:10px 10px 10px" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="record_date" class="col-xs-3 input-lg">日期</label>
@@ -141,7 +138,7 @@
                 <h4 class="modal-title input-lg" id="myModalLabel">新增日记</h4>
             </div>
             <form role="form" class="form-horizontal" style="margin:20px 10px 10px"
-                  action="{{ url_for('baby.add_baby_diary') }}" method="post">
+                  action="{{ url_for('diary.add_baby_diary') }}" method="post">
                 <div class="form-group">
                     <label for="record_date" class="col-xs-3 input-lg">日期</label>
                     <div class="col-xs-9">

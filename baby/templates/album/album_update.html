@@ -5,7 +5,7 @@
 {% block content %}
 
 <div class="row img-rounded" style="margin:50px 10px 50px">
-    <form action="{{ url_for('baby.album_update',album_id=photo['id'])}}"
+    <form action="{{ url_for('album.album_update',album_id=photo['id'])}}"
           method="post" class="form-horizontal">
         <div class="form-group">
             <label for="recordDate" class="col-xs-3 input-lg date-picker">日期</label>
@@ -63,7 +63,7 @@
             <div class="modal-body input-lg">确定删除该图片吗？</div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-block btn-lg " data-dismiss="modal">取消</button>
-                <form action="{{ url_for('baby.album_delete', album_id=photo['id']) }}" method="post">
+                <form action="{{ url_for('album.album_delete', album_id=photo['id']) }}" method="post">
                     <button class="btn btn-lg btn-block bg-danger" type="submit">确定</button>
                 </form>
             </div>

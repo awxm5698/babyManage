@@ -6,8 +6,9 @@
 
 <div class="row img-rounded" style="margin:50px 10px 10px">
     {% if photo['file_type']==0 %}
-    <div class="text-center " style="max-weight:300px;max-height:300px;overflow: scroll">
-        <img src="{{ url_for('static',filename=photo['large_img_path'])}}"/>
+    <div class="text-center ">
+        <img style="width:350px;height:350px"
+             src="{{ url_for('static',filename=photo['large_img_path'])}}"/>
         {% else %}
         <video class="text-center" controls>
             <source src="{{ url_for('static',filename=photo['img_path'])}}" type="video/mp4">

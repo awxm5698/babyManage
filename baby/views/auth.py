@@ -60,7 +60,7 @@ def login():
             session.clear()
             session['user_id'] = user['id']
             session['user_name'] = user['user_name']
-            return redirect(url_for('baby.mine'))
+            return redirect(url_for('baby.home'))
 
         flash(error)
 
@@ -83,6 +83,14 @@ def load_logged_in_user():
         g.user = get_db().execute(
             'SELECT * FROM user WHERE id = ?', (user_id,)
         ).fetchone()
+        g.baby = get_db().execute(
+            'select * from baby_info where user_id=? and is_default=1', (user_id,)
+        ).fetchone()
+        if not g.baby:
+            g.baby = get_db().execute(
+                'select * from baby_info where user_id=? ', (user_id,)
+            ).fetchone()
+
 
 
 @bp.before_app_request

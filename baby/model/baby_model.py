@@ -21,13 +21,9 @@ class BabyModel:
         db.commit()
 
     @staticmethod
-    def get_baby_healthy(db, user_id):
-        sql = 'select u.id,u.user_name,b.id as baby_id,b.baby_name,' \
-              ' b.baby_sex,b.birthday,b.introduce' \
-              ' from user u left join baby_info b on u.id = b.user_id ' \
-              ' left join manage_healthy m on m.baby_id = b.id ' \
-              ' where u.id = ?'
-        baby_info = db.execute(sql, (user_id,)).fetchall()
+    def get_baby_healthy(db, baby_id):
+        sql = 'select * from manage_healthy where baby_id = ?'
+        baby_info = db.execute(sql, (baby_id,)).fetchall()
         return baby_info
 
     @staticmethod

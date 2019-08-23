@@ -6,7 +6,7 @@
 {% block content %}
 <div class="row clearfix img-rounded" style="margin:50px 10px 15px">
     <form role="form" class="form-horizontal" style="margin:20px 10px 10px"
-          action="{{ url_for('baby.update_footprint',footprint_id=footprint_info['id']) }}"
+          action="{{ url_for('footprint.update_footprint',footprint_id=footprint_info['id']) }}"
           method="post" enctype="multipart/form-data">
         <div class="form-group">
             <label for="record_date" class="col-xs-3 input-lg">日期</label>

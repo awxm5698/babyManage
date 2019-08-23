@@ -5,7 +5,7 @@
 {% block pageName %}上传文件{% endblock %}
 {% block content %}
 <div class="row clearfix img-rounded" style="margin:50px 10px 15px">
-    <form action="{{ url_for('baby.upload')}}" method="post"
+    <form action="{{ url_for('album.album_upload')}}" method="post"
           enctype="multipart/form-data" class="form-horizontal">
         <div class="form-group">
             <label for="recordDate" class="col-xs-3 input-lg ">日期</label>

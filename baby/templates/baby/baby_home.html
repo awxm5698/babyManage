@@ -1,0 +1,108 @@
+{% extends 'base_baby.html' %}
+
+<h1>{% block title %}主页{% endblock %}</h1>
+{% block pageName %}宝宝主页{% endblock %}
+{% block content %}
+
+<div class="row clearfix bg-primary img-rounded"
+     style="margin:50px 10px 10px ;overflow:hidden;">
+    <h3 class="text-center">宝宝资料</h3>
+    {% for baby in baby_info %}
+    {% if baby['id'] == g.baby['id'] %}
+    <a href="{{url_for('baby.update_baby_info',baby_id=baby['id'])}}">
+        <div class="bg-success img-rounded" style="margin:10px 10px 0px">
+            <p style="font-size:16px;margin:10px 20px 10px">
+                姓名: &nbsp;
+                <span style="color:#FF00CC">{{ baby['baby_name'] }}</span>
+                <br>性别: &nbsp;
+                {% if baby['baby_sex']==1 %}
+                <span style="color:#FF00CC">男</span>
+                {% elif baby['baby_sex']==0 %}
+                <span style="color:#FF00CC">女</span>
+                {% endif %}
+                <br>生日: &nbsp;
+                <span style="color:#FF00CC">{{ baby['birthday'] }}</span>
+                <br>年龄: &nbsp;
+                {% for age in ages %}
+                {% if age['id']== baby['id'] %}
+                <span style="color:#FF00CC">{{age['age']}}</span>
+                {% endif %}
+                {% endfor %}
+                <br>寄语: &nbsp;
+                <span style="color:#FF00CC">{{ baby['introduce'] }}</span>
+            </p>
+        </div>
+    </a>
+
+    <div style="position:relative; top:-120px;left:250px">
+        <button data-toggle="modal" data-target="#defaultBaby">切换宝贝</button>
+    </div>
+    {% endif %}
+    {% endfor %}
+</div>
+<div class="row clearfix bg-primary img-rounded"
+     style="margin:10px 10px 10px ;overflow:hidden;">
+    <h3 class="text-center">健康记录</h3>
+    <!--<div class="bg-success img-rounded "-->
+         <!--style="margin:10px 10px 0px;height:200px;position: relative">-->
+        <!--<div style="float:left;width:10px;height:50px;margin:0px;-->
+        <!--background-color:#00FFCC;position: relative;color:#000000">50-->
+        <!--</div>-->
+        <!--<div style="float:left;width:10px;height:30px;margin:0px;-->
+        <!--background-color:#FF00CC;position: relative;color:#000000">3.0-->
+        <!--</div>-->
+    <!--</div>-->
+    {% for healthy in baby_healthy%}
+    <a href="{{ url_for('baby.update_healthy',healthy_id=healthy['id']) }}">
+    <div class="bg-success img-rounded" style="margin:0px 10px 10px">
+    <p style="font-size:16px;margin:10px 10px 10px 10px">记录日期: &nbsp;
+    <span style="color:#FF00CC">{{ healthy['record_date'] }}</span>
+    <br>身高: &nbsp;
+    <span style="color:#FF00CC">{{ healthy['height'] }}&nbsp;cm</span>
+    &nbsp;||&nbsp;体重: &nbsp;
+    <span style="color:#FF00CC">{{ healthy['weight'] }}&nbsp;kg</span>
+    <br>备注: &nbsp;
+    <span style="color:#FF00CC">{{ healthy['remarks'] }}</span>
+    </p>
+    </div>
+    </a>
+    {% endfor%}
+    <div class="carousel-inner" style="text-align:center;margin:10px 0px 10px">
+        <img class="img-rounded" style="max-height:300px" src="../static/img/a1.jpg"/>
+    </div>
+</div>
+<div class="modal fade text-center" id="defaultBaby" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title input-lg" id="myModalLabel">切换宝贝</h4>
+            </div>
+
+            <form class="form-horizontal" style="margin:20px 10px 10px"
+                  action="{{ url_for('baby.set_default_baby') }}"
+                  method="post">
+                <div class="form-group">
+                    <label for="baby" class="col-xs-4 input-lg">默认宝贝</label>
+                    <div class="col-xs-8">
+                        <select class="col-xs-9 input-lg" name="baby" id="baby">
+                            {% for baby in baby_info %}
+                            {% if baby['id'] == g.baby['id'] %}
+                            <option class="input-lg" value="{{baby['id']}}" selected>{{baby['baby_name']}}</option>
+                            {% else %}
+                            <option class="input-lg" value="{{baby['id']}}">{{baby['baby_name']}}</option>
+                            {% endif %}
+                            {% endfor%}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group text-center">
+                    <button type="button" class="btn btn-default btn-lg" data-dismiss="modal">关闭</button>
+                    <button type="submit" class="btn btn-primary btn-lg">提交</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+{% endblock %}

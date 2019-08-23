@@ -1,14 +1,75 @@
 
-<!doctype html>
-<div class="modal fade text-center" id="{% block modal-id %}{% endblock %}" tabindex="-1" role="dialog"
-     aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">{% block modal-header %}{% endblock %}</h4>
-            </div>
-           {% block modal-center %}{% endblock %}
-            {% block modal-foot %}{% endblock %}
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal -->
+<!DOCTYPE>
+<html>
+
+<head>
+    <style>
+			body {
+				padding: 0;
+				margin: 0;
+				background-color: #fff;
+			}
+			.contanir{
+				height: 300px;
+				width: 400px;
+				position: relative;
+			}
+			.red {
+				position:absolute;	
+				background-color: #f00;
+				height: 30%;
+				width: 10%;
+				left: 0;
+				top:210px;
+				margin-right: 20px;
+			}
+			.gray {
+				background-color: #ddd;
+				position:absolute;	
+				left: 50px;
+				top: 60px;
+				height: 80%;
+				width: 10%;
+				margin-right: 20px;
+			}
+			.green{
+				position:absolute;	
+				left: 100px;
+				top: 90px;
+				background-color: #0fd;
+				height: 70%;
+				width: 10%;
+				margin-right: 20px;
+			}
+			.yellow{
+				position:absolute;	
+				left: 150px;
+				top: 120px;
+				background-color: #ff0;
+				height: 60%;
+				width: 10%;
+				margin-right: 20px;
+			}
+			.black{
+				position:absolute;	
+				left: 200px;
+				top: 30px;
+				background-color: #234;
+				height: 90%;
+				width: 10%;
+				margin-right: 20px;
+			}
+		</style>
+</head>
+
+<body>
+<div class="contanir" style="">
+    <div class="red"></div>
+    <div class="gray"></div>
+    <div class="green"></div>
+    <div class="yellow"></div>
+    <div class="black"></div>
+</div>
+</body>
+
+</html>

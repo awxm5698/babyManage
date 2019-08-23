@@ -8,7 +8,7 @@
 </div>
 {% for diary in baby_diary%}
 <div class="row clearfix bg-primary img-rounded" style="margin:30px 10px 10px">
-    <a href="{{ url_for('baby.update_diary',diary_id=diary['id'])}}">
+    <a href="{{ url_for('diary.update_diary',diary_id=diary['id'])}}">
         <div style="margin:10px 0px 10px">
             <div class="col-xs-4 bg-success img-rounded"
                  style="position:relative;left:10px;top:-50px;text-align: center">
@@ -32,14 +32,14 @@
 <div class="center-right">
     {% if page['page'] !=1 %}
     <div style="position:fixed;top:200px;right:5px">
-        <a href="{{ url_for('baby.diary',page=page['page']-1,page_size=5) }}">
+        <a href="{{ url_for('diary.diary',page=page['page']-1,page_size=5) }}">
             <button class="" style="margin:10px 10px 10px">
                 <i class="fa fa-chevron-up fa-2x" aria-hidden="true"></i>
             </button>
         </a>
     </div>
     {% endif %}
-    {% if page['all_page'] !=0 %}
+    {% if page['all_page'] > 1 %}
     <div style="position:fixed;top:250px;right:5px">
         <button class="btn" style="margin:10px 10px 10px">
             {{page['page']}}/{{page['all_page']}}
@@ -48,7 +48,7 @@
     {% endif %}
     {% if page['page'] < page['all_page'] %}
     <div style="position:fixed;top:300px;right:5px">
-        <a href="{{ url_for('baby.diary',page=page['page']+1,page_size=5) }}">
+        <a href="{{ url_for('diary.diary',page=page['page']+1,page_size=5) }}">
             <button class="" style="margin:10px 10px 10px">
                 <i class="fa fa-chevron-down fa-2x" aria-hidden="true"></i>
             </button>

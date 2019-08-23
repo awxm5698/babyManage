@@ -6,7 +6,7 @@
 {% block content %}
 <div class="row clearfix bg-primary img-rounded" style="margin:50px 10px 15px">
     <form role="form" class="form-horizontal"  style="margin:20px 10px 10px"
-          action="{{ url_for('baby.update_diary',diary_id=diary['id']) }}" method="post">
+          action="{{ url_for('diary.update_diary',diary_id=diary['id']) }}" method="post">
         <div class="form-group">
             <label for="record_date" class="col-xs-3 input-lg">日期</label>
             <div class="col-xs-9">
