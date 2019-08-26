@@ -57,10 +57,11 @@ class BabyModel:
         return baby_healthy
 
     @staticmethod
-    def add_footprint(db, user_id, record_date, footprint_name, footprint_desc, footprint_img):
-        sql = 'insert into manage_footprint (user_id, record_date, footprint_name,' \
-              'footprint_desc,footprint_img) values (?,?,?,?,?)'
-        db.execute(sql, (user_id, record_date, footprint_name, footprint_desc,footprint_img))
+    def add_footprint(db, user_id, baby_id, record_date, footprint_name, footprint_desc, footprint_img):
+        sql = 'insert into manage_footprint (user_id, baby_id, record_date, footprint_name,' \
+              'footprint_desc,footprint_img) values (?,?,?,?,?,?)'
+        db.execute(sql, (user_id, baby_id, record_date, footprint_name,
+                         footprint_desc, footprint_img))
         db.commit()
 
     @staticmethod
@@ -71,8 +72,8 @@ class BabyModel:
         db.commit()
 
     @staticmethod
-    def get_footprint(db, user_id):
-        sql = 'select * from manage_footprint where user_id = ? and is_deleted=0'
-        footprint = db.execute(sql, (user_id,)).fetchall()
+    def get_footprint(db, user_id, baby_id):
+        sql = 'select * from manage_footprint where user_id = ? and baby_id=? and is_deleted=0'
+        footprint = db.execute(sql, (user_id, baby_id)).fetchall()
         return footprint
 

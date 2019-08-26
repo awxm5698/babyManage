@@ -43,30 +43,41 @@
 <div class="row clearfix bg-primary img-rounded"
      style="margin:10px 10px 10px ;overflow:hidden;">
     <h3 class="text-center">健康记录</h3>
-    <!--<div class="bg-success img-rounded "-->
-         <!--style="margin:10px 10px 0px;height:200px;position: relative">-->
-        <!--<div style="float:left;width:10px;height:50px;margin:0px;-->
-        <!--background-color:#00FFCC;position: relative;color:#000000">50-->
-        <!--</div>-->
-        <!--<div style="float:left;width:10px;height:30px;margin:0px;-->
-        <!--background-color:#FF00CC;position: relative;color:#000000">3.0-->
-        <!--</div>-->
-    <!--</div>-->
-    {% for healthy in baby_healthy%}
-    <a href="{{ url_for('baby.update_healthy',healthy_id=healthy['id']) }}">
-    <div class="bg-success img-rounded" style="margin:0px 10px 10px">
-    <p style="font-size:16px;margin:10px 10px 10px 10px">记录日期: &nbsp;
-    <span style="color:#FF00CC">{{ healthy['record_date'] }}</span>
-    <br>身高: &nbsp;
-    <span style="color:#FF00CC">{{ healthy['height'] }}&nbsp;cm</span>
-    &nbsp;||&nbsp;体重: &nbsp;
-    <span style="color:#FF00CC">{{ healthy['weight'] }}&nbsp;kg</span>
-    <br>备注: &nbsp;
-    <span style="color:#FF00CC">{{ healthy['remarks'] }}</span>
-    </p>
+    <div class="bg-primary img-rounded overflow:scroll;" width="340"
+         style="margin:10px 10px 10px">
+        <canvas class="bg-success" id="myCanvas" width="340" height="220">
+            您的浏览器不支持 HTML5 canvas 标签。</canvas>
+
+        <table class="table table-bordered text-center"  width="340">
+            <tr>
+                <th class="text-center">日期</th>
+                <th class="text-center">身高/cm</th>
+                <th class="text-center">体重/kg</th>
+            </tr>
+            {% for healthy in baby_healthy%}
+            <tr>
+                <td>{{ healthy['record_date'] }}</td>
+                <td>{{ healthy['height'] }}</td>
+                <td>{{ healthy['weight'] }}</td>
+            </tr>
+            {% endfor%}
+        </table>
     </div>
-    </a>
-    {% endfor%}
+    <!--{% for healthy in baby_healthy%}-->
+    <!--<a href="{{ url_for('baby.update_healthy',healthy_id=healthy['id']) }}">-->
+    <!--<div class="bg-success img-rounded" style="margin:0px 10px 10px">-->
+    <!--<p style="font-size:16px;margin:10px 10px 10px 10px">记录日期: &nbsp;-->
+    <!--<span style="color:#FF00CC">{{ healthy['record_date'] }}</span>-->
+    <!--<br>身高: &nbsp;-->
+    <!--<span style="color:#FF00CC">{{ healthy['height'] }}&nbsp;cm</span>-->
+    <!--&nbsp;||&nbsp;体重: &nbsp;-->
+    <!--<span style="color:#FF00CC">{{ healthy['weight'] }}&nbsp;kg</span>-->
+    <!--<br>备注: &nbsp;-->
+    <!--<span style="color:#FF00CC">{{ healthy['remarks'] }}</span>-->
+    <!--</p>-->
+    <!--</div>-->
+    <!--</a>-->
+    <!--{% endfor%}-->
     <div class="carousel-inner" style="text-align:center;margin:10px 0px 10px">
         <img class="img-rounded" style="max-height:300px" src="../static/img/a1.jpg"/>
     </div>
@@ -105,4 +116,76 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
 </div>
+<script>
+//获取身高体重信息
+var height = []
+var weight = []
+{% for healthy in baby_healthy%}
+    height.push({{healthy['height']}})
+    weight.push({{healthy['weight']}})
+{% endfor%}
+
+//获取元素
+var c=document.getElementById("myCanvas");
+var ctx=c.getContext("2d");
+//绘制Y轴-身高
+ctx.moveTo(20,10);
+ctx.lineTo(20,200);
+ctx.stroke();
+ctx.fillText("身高/cm",25,20);
+//绘制坐标
+var h_location = 50
+for( var i=0; i < 3; i++){
+    ctx.moveTo(15,150-h_location*i);
+    ctx.lineTo(20,150-h_location*i);
+    ctx.stroke();
+    ctx.fillText(h_location*(i+1),0,150-h_location*i);
+}
+//绘制Y轴-重量
+ctx.moveTo(320,10);
+ctx.lineTo(320,200);
+ctx.stroke();
+ctx.fillText("体重/kg",280,20);
+//绘制重量坐标基础间隔
+var max_weight = Math.max.apply(Math,weight);
+if(max_weight<=15){
+    var w_location = 5
+    }
+else{
+    var w_location = 10
+    }
+//绘制坐标
+for( var i=0; i < 3; i++){
+    ctx.moveTo(320,150-50*i);
+    ctx.lineTo(325,150-50*i);
+    ctx.stroke();
+    ctx.fillText(w_location*(i+1),327,150-50*i);
+}
+
+//绘制X轴
+ctx.moveTo(20,200);
+ctx.lineTo(310,200);
+ctx.stroke();
+ctx.font="60px";
+ctx.fillText("时间轴",290,215);
+
+//根据基础重量坐标计算重量放大比例
+if(w_location==5){
+    var size = 10
+    }else{
+    var size = 5
+    }
+
+//绘制数据
+for( var i=0; i < height.length; i++){
+    ctx.fillStyle="#00FF66";
+    ctx.fillRect(30+25*i,200-height[i],10,height[i]);
+    ctx.fillStyle="#0000FF";
+    ctx.fillRect(40+25*i,200-weight[i]*size,10,weight[i]*size);
+    ctx.fillStyle="#000033";
+    ctx.fillText(i+1,35+25*i,215);
+}
+
+
+</script>
 {% endblock %}

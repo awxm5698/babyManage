@@ -139,3 +139,7 @@
 --2019-08-23
 --alter table relative add column baby_id integer default 1;
 --alter table baby_info add column is_default integer default 0;
+
+--2019-08-26
+--alter table manage_footprint add column baby_id integer default null;
+--update manage_footprint set baby_id = 1 where user_id =1;

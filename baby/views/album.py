@@ -27,6 +27,7 @@ def album(page=1, page_size=6):
                 'page_count': 0, 'count': 0}
         return render_template('album/album.html', page=page)
 
+
 @bp.route('/album/<int:album_id>/detail')
 @login_required
 def album_detail(album_id):
@@ -41,7 +42,7 @@ def album_detail(album_id):
 @bp.route('/album/<int:album_id>/update', methods=('POST', 'GET'))
 @login_required
 def album_update(album_id):
-    footprints = baby_model.get_footprint(get_db(), g.user['id'])
+    footprints = baby_model.get_footprint(get_db(), g.user['id'], g.baby['id'])
     photo = get_db().execute('select * from manage_album where id=?',
                              (album_id,)).fetchone()
     if request.method == 'POST':
@@ -73,7 +74,7 @@ def album_delete(album_id):
 @login_required
 def album_upload():
     file_model = FileModel(g.config['upload_path'])
-    footprints = baby_model.get_footprint(get_db(), g.user['id'])
+    footprints = baby_model.get_footprint(get_db(), g.user['id'], g.baby['id'])
     baby_id = 1
     if request.method == 'POST':
         record_date = request.form['recordDate']

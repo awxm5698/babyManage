@@ -1,75 +1,78 @@
-
-<!DOCTYPE>
+<!DOCTYPE html>
 <html>
+<head> 
+    <meta charset="utf-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
-<head>
-    <style>
-			body {
-				padding: 0;
-				margin: 0;
-				background-color: #fff;
-			}
-			.contanir{
-				height: 300px;
-				width: 400px;
-				position: relative;
-			}
-			.red {
-				position:absolute;	
-				background-color: #f00;
-				height: 30%;
-				width: 10%;
-				left: 0;
-				top:210px;
-				margin-right: 20px;
-			}
-			.gray {
-				background-color: #ddd;
-				position:absolute;	
-				left: 50px;
-				top: 60px;
-				height: 80%;
-				width: 10%;
-				margin-right: 20px;
-			}
-			.green{
-				position:absolute;	
-				left: 100px;
-				top: 90px;
-				background-color: #0fd;
-				height: 70%;
-				width: 10%;
-				margin-right: 20px;
-			}
-			.yellow{
-				position:absolute;	
-				left: 150px;
-				top: 120px;
-				background-color: #ff0;
-				height: 60%;
-				width: 10%;
-				margin-right: 20px;
-			}
-			.black{
-				position:absolute;	
-				left: 200px;
-				top: 30px;
-				background-color: #234;
-				height: 90%;
-				width: 10%;
-				margin-right: 20px;
-			}
-		</style>
+    <title>***</title> 
 </head>
-
 <body>
-<div class="contanir" style="">
-    <div class="red"></div>
-    <div class="gray"></div>
-    <div class="green"></div>
-    <div class="yellow"></div>
-    <div class="black"></div>
-</div>
-</body>
+<div class="bg-primary img-rounded overflow:scroll;" width="350"
+     style="margin:10px 10px 10px">
+<canvas class="bg-success" id="myCanvas" width="400" height="220">
+    您的浏览器不支持 HTML5 canvas 标签。</canvas>
 
+<table class="table table-bordered">
+    <tr>
+        <th>序号</th>
+        <th>日期</th>
+        <th>身高</th>
+        <th>体重</th>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td>2019-07-11</td>
+        <td>50</td>
+        <td>3</td>
+    </tr>
+</table></div>
+<script>
+
+var c=document.getElementById("myCanvas");
+var ctx=c.getContext("2d");
+//绘制Y轴
+ctx.moveTo(20,10);
+ctx.lineTo(20,200);
+ctx.stroke();
+ctx.fillText("身高/cm",25,20);
+//绘制坐标
+ctx.moveTo(15,150);
+ctx.lineTo(20,150);
+ctx.stroke();
+ctx.fillText("50",0,150);
+
+ctx.moveTo(15,100);
+ctx.lineTo(20,100);
+ctx.stroke();
+ctx.fillText("100",0,100);
+
+ctx.moveTo(15,50);
+ctx.lineTo(20,50);
+ctx.stroke();
+ctx.fillText("150",0,50);
+
+//绘制X轴
+ctx.moveTo(20,200);
+ctx.lineTo(350,200);
+ctx.stroke();
+ctx.font="60px";
+ctx.fillText("时间轴",330,215);
+
+var height = [50,56,60,70,90]
+var weight = [3,4.4,5,9.5,10.6]
+//绘制数据
+
+for( var i=0; i < height.length; i++){
+    ctx.fillStyle="#0F0000";
+    ctx.fillRect(30+25*i,200-height[i],10,height[i]);
+    ctx.fillStyle="#FF0000";
+    ctx.fillRect(40+25*i,200-weight[i]*10,10,weight[i]*10);
+    ctx.fillText(i+1,35+25*i,215);
+}
+
+
+
+</script>
+
+</body>
 </html>

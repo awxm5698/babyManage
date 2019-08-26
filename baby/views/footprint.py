@@ -13,7 +13,7 @@ baby_model = BabyModel()
 @bp.route('/footprint')
 @login_required
 def footprint():
-    footprints = baby_model.get_footprint(get_db(), g.user['id'])
+    footprints = baby_model.get_footprint(get_db(), g.user['id'], g.baby['id'])
     return render_template('footprint/footprint.html', footprints=footprints)
 
 
@@ -60,7 +60,8 @@ def add_footprint():
 
         if error is None:
             db = get_db()
-            baby_model.add_footprint(db, g.user['id'], record_date, footprint_name, footprint_desc, footprint_img)
+            baby_model.add_footprint(db, g.user['id'], g.baby['id'], record_date,
+                                     footprint_name, footprint_desc, footprint_img)
             return redirect(url_for('footprint.footprint'))
 
 
