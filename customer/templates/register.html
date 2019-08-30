@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,
+          maximum-scale=1, user-scalable=no">
+    <title>Title</title>
+    <link href="../static/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="../static/js/createDB.js" type="text/javascript"></script>
+    <script src="../static/js/md5.js" type="text/javascript"></script>
+</head>
+
+<body style="height:100%">
+
+<div class="container" style="text-align:center">
+    <div style="margin:30px 10px 20px">
+        <div class="carousel-inner"  style="max-height:100px">
+            <div class="item active" id="login-logo">
+                <img  alt="" src="../static/img/01.jpg" />
+            </div>
+        </div>
+    </div>
+    <div id="msg">
+
+    </div>
+    <div style="margin:20px 15px 50px">
+        <form role="form" class="form-block" id="loginForm" action="#" method="post">
+            <div class="form-group">
+                <label for="username"></label>
+                <input type="text" class="form-control input-lg"
+                       placeholder="请输入账号" name="username"
+                       id="username" required/>
+            </div>
+
+            <div class="form-group">
+                <label for="password"></label>
+                <input type="password" class="form-control input-lg"
+                       placeholder="请输入密码" name="password"
+                       id="password" required/>
+            </div>
+            <div class="form-group">
+                <label for="password1"></label>
+                <input type="password" class="form-control input-lg"
+                       placeholder="请再次输入密码" name="password1"
+                       id="password1" value="" required/>
+            </div>
+            <div></div>
+            <div  class="form-group" >
+                <label></label>
+                <a type="button" class="btn btn-lg"
+                   href="../main.html" >返回</a>
+                <button type="button" class="btn btn-lg" onclick="register()">立即注册</button>
+            </div>
+
+        </form>
+    </div>
+
+    <div class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+        <span class="nav-link" href="#">@2019</span>
+        <a class="nav-link" href="#">客户管理</a>
+    </div>
+
+</div>
+<script>
+    window.onload = function () {
+        document.getElementById("password").onchange = validatePassword;
+        document.getElementById("password1").onchange = validatePassword;
+    }
+
+    function validatePassword() {
+        var pass1 = document.getElementById("password1").value;
+        var pass = document.getElementById("password").value;
+        if (pass1 != pass)
+            document.getElementById("password1").setCustomValidity("Passwords Don't Match");
+        else
+            document.getElementById("password1").setCustomValidity('');
+        //empty string means no validation error
+    }
+
+</script>
+<script src="../static/js/sign.js" type="text/javascript"></script>
+</body>
+</html>

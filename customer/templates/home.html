@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,
+          maximum-scale=1, user-scalable=no">
+    <title>Home</title>
+    <style>
+    .baby_nav_foot{float:left;width:25%;text-align: center}
+
+    </style>
+    <link href="../static/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script src="../static/js/createDB.js" type="text/javascript"></script>
+</head>
+
+<body style="height:100%">
+<div class="container">
+    <div class="text-center img-rounded" id="header" style="height:40px">
+            <h3>客户管理中心</h3>
+    </div>
+
+    <div id="frame">
+        <iframe id="myFrame" src='company.html' style='width:100%'></iframe>
+    </div>
+
+    <div class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+        <div style="width: 100%;margin: auto;">
+            <div class="baby_nav_foot">
+                <button class="btn btn-block btn-lg"
+                        onclick="loadCustomer()">客户
+                </button>
+            </div>
+            <div class="baby_nav_foot">
+                <button class="btn btn-block btn-lg"
+                        onclick="loadShip()">供货</button>
+            </div>
+            <div class="baby_nav_foot">
+                <button class="btn btn-block btn-lg"
+                        onclick="loadMine()">我的
+                </button>
+            </div>
+            <div class="baby_nav_foot">
+                <button class="btn btn-block btn-lg"
+                   onclick="signOut()">退出</button>
+            </div>
+        </div>
+    </div>
+</div>
+<a href="#"></a>
+<script>
+    $(document).ready(function () {
+            var nav = $('.navbar');
+            var fm = $('#frame')
+            var frame = document.getElementById('myFrame');
+            frame.style.height = Math.floor(nav.offset().top -fm.offset().top-5) +'px';
+        });
+    function loadMine(){
+        document.getElementById("myFrame").src="mine.html";
+    };
+    function loadCustomer(){
+        document.getElementById("myFrame").src="company.html";
+    };
+    function loadShip(){
+        document.getElementById("myFrame").src="ship.html";
+    };
+
+</script>
+<script src="../static/js/sign.js" type="text/javascript"></script>
+</body>
+</html>
