@@ -62,7 +62,13 @@
         </a>
     </div>
 </div>
-
+<div class="row clearfix bg-primary img-rounded" style="margin:10px 10px 15px;height:auto">
+    <div class="col-xs-12 text-center" style="margin:10px 0 10px">
+        <a href="{{ url_for('learn.learn') }}">
+            <button type="button" class="btn btn-lg btn-block">学习成长</button>
+        </a>
+    </div>
+</div>
 {% if g.user['user_level']==0 %}
 <div class="row clearfix bg-primary img-rounded" style="margin:10px 10px 15px;height:auto">
     <div class="col-xs-12 text-center" style="margin:10px 0 10px">

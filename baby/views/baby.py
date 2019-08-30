@@ -54,7 +54,7 @@ def update_healthy(healthy_id):
                        (record_date, my_weight, my_height, remarks, healthy_id))
             db.commit()
             return redirect(url_for('baby.home'))
-    return render_template('baby/healthy_detail.html', healthy=healthy)
+    return render_template('baby/baby_healthy_update.html', healthy=healthy)
 
 
 @bp.route('/add/baby/information', methods=('GET', 'POST'))

@@ -1,0 +1,39 @@
+{% extends 'base_baby.html' %}
+
+<h1>{% block title %}学习{% endblock %}</h1>
+{% block pageName %}早教{% endblock %}
+
+{% block style %}
+.margin-10{margin:10px 10px 10px}
+.size-220{font-size:220px;}
+.size-40{font-size:40px;}
+{% endblock %}
+{% block content %}
+<div id="snow">
+
+</div>
+<div class="row clearfix bg-primary img-rounded text-center"
+     style="margin:50px 10px 10px ;overflow:hidden;">
+    <h2 class="text-center">宝宝爱学习</h2>
+    <a onclick="location.reload()">
+
+        {% if knowledge|length == 1 %}
+        <div class="margin-10 img-rounded" style="background: #EAEAEF">
+            <span class="size-220" style="color:#00FF00">{{knowledge}}</span></div>
+        {% else %}
+        <div class="margin-10 img-rounded" style="background: #EAEAEF">
+            <i class="fa {{knowledge}} size-220" aria-hidden="true"></i></div>
+        {% endif %}
+    </a>
+</div>
+
+<div class="row clearfix img-rounded text-center"
+     style="margin:50px 10px 10px ;overflow:hidden;">
+    <a href="{{url_for('learn.learn')}}">
+        <div class="col-xs-12">
+            <span class="size-40">退出</span>
+        </div>
+    </a>
+</div>
+
+{% endblock %}

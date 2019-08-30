@@ -143,3 +143,6 @@
 --2019-08-26
 --alter table manage_footprint add column baby_id integer default null;
 --update manage_footprint set baby_id = 1 where user_id =1;
+
+--2019-08-29
+--insert into config (key,value) values ('special','None');

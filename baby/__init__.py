@@ -7,7 +7,7 @@ from .views import album
 from .views import diary
 from .views import footprint
 from .views import mine
-
+from .views import learn
 
 def create_app(test_config=None):
     # create and configure the app
@@ -43,6 +43,7 @@ def create_app(test_config=None):
     app.register_blueprint(diary.bp)
     app.register_blueprint(footprint.bp)
     app.register_blueprint(mine.bp)
+    app.register_blueprint(learn.bp)
     app.add_url_rule('/', endpoint='index')
 
     return app

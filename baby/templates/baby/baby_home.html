@@ -56,7 +56,8 @@
             </tr>
             {% for healthy in baby_healthy%}
             <tr>
-                <td>{{ healthy['record_date'] }}</td>
+                <td><a href="{{ url_for('baby.update_healthy',healthy_id=healthy['id']) }}">
+                    <span style="color:#ffffff">{{ healthy['record_date'] }}</span></a></td>
                 <td>{{ healthy['height'] }}</td>
                 <td>{{ healthy['weight'] }}</td>
             </tr>
@@ -180,8 +181,18 @@ if(w_location==5){
 for( var i=0; i < height.length; i++){
     ctx.fillStyle="#00FF66";
     ctx.fillRect(30+25*i,200-height[i],10,height[i]);
+
+    <!--ctx.moveTo(20,200-height[i]);-->
+    <!--ctx.lineTo(25,200-height[i]);-->
+    <!--ctx.stroke();-->
+
     ctx.fillStyle="#0000FF";
     ctx.fillRect(40+25*i,200-weight[i]*size,10,weight[i]*size);
+
+    <!--ctx.moveTo(315,200-weight[i]*size);-->
+    <!--ctx.lineTo(320,200-weight[i]*size);-->
+    <!--ctx.stroke();-->
+
     ctx.fillStyle="#000033";
     ctx.fillText(i+1,35+25*i,215);
 }
