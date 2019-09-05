@@ -4,71 +4,205 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1,
           maximum-scale=1, user-scalable=no">
-    <title>Home</title>
-    <style>
-    .baby_nav_foot{float:left;width:25%;text-align: center}
-
-    </style>
-    <link href="../static/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
-    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-    <script src="../static/js/createDB.js" type="text/javascript"></script>
+    <title>客户管理中心</title>
+    <script type="text/javascript" src="../static/js/header.js" charset="utf-8"></script>
+    <script src="https://cdn.bootcss.com/xlsx/0.11.5/xlsx.core.min.js"></script>
 </head>
 
 <body style="height:100%">
 <div class="container">
     <div class="text-center img-rounded" id="header" style="height:40px">
-            <h3>客户管理中心</h3>
+        <h3>客户管理中心</h3>
+        <div class="dropdown" style="position:absolute;top:15px;left:15px;">
+            <button type="button" class="btn dropdown-toggle" id="dropdownMenu1"
+                    data-toggle="dropdown">
+                <span class="input-small" onclick="checkSign()" id="userName"></span>
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                <li role="presentation" class="input-lg">
+                    <a role="menuitem" tabindex="-1" data-toggle="modal" data-target="#describe">版本说明</a>
+                </li>
+                <li role="presentation" class="divider"></li>
+                <li role="presentation" class="input-lg">
+                    <a role="menuitem" tabindex="-1"  data-toggle="modal" data-target="#uploadData">上传数据</a>
+                </li>
+                <li role="presentation" class="divider"></li>
+                <li role="presentation" class="input-lg">
+                    <a role="menuitem" tabindex="-1" data-toggle="modal" data-target="#signOut">退出</a>
+                </li>
+            </ul>
+        </div>
     </div>
 
     <div id="frame">
-        <iframe id="myFrame" src='company.html' style='width:100%'></iframe>
+        <iframe id="myFrame" src='guess.html' style='width:100%'></iframe>
     </div>
 
     <div class="navbar navbar-default navbar-fixed-bottom" role="navigation">
         <div style="width: 100%;margin: auto;">
-            <div class="baby_nav_foot">
+            <div class="nav_foot">
                 <button class="btn btn-block btn-lg"
                         onclick="loadCustomer()">客户
                 </button>
             </div>
-            <div class="baby_nav_foot">
+            <div class="nav_foot">
                 <button class="btn btn-block btn-lg"
-                        onclick="loadShip()">供货</button>
-            </div>
-            <div class="baby_nav_foot">
-                <button class="btn btn-block btn-lg"
-                        onclick="loadMine()">我的
+                        onclick="loadShip()">供货
                 </button>
             </div>
-            <div class="baby_nav_foot">
+            <div class="nav_foot">
                 <button class="btn btn-block btn-lg"
-                   onclick="signOut()">退出</button>
+                        onclick="loadGuess()">预测
+                </button>
+            </div>
+            <div class="nav_foot">
+                <button class="btn btn-block btn-lg"
+                        onclick="loadCount()">统计
+                </button>
             </div>
         </div>
     </div>
 </div>
-<a href="#"></a>
+<div class="modal fade" id="signOut" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">您确定要退出登录吗？</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="signOut()">确定</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<div class="modal fade" id="describe" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">版本说明</h4>
+            </div>
+            <div class="modal-body">
+                <h4>1.版本</h4>
+                <p>V 1.0.0</p>
+                <h4>2.产品概述</h4>
+                <p>本产品用于管理客户信息，统计供货数据以及预测客户的供货需求，本产品数据全部存于本地，
+                    <span style="color:red">清除浏览器缓存会导致数据丢失，请谨慎操作</span>，
+                    可使用下载功能保存已添加的数据，可通过excel编辑用户或供货信息进行导入。
+                    excel模板请通过下载功能获取。
+                </p>
+                <h4>3.关于客户</h4>
+                <p>新增客户信息后，<span style="color:red">客户信息不能删除，</span>
+                    可以下载已添加的客户信息到本地，下载文件名：客户信息+下载时间.xls。</p>
+                <h4>4.关于供货</h4>
+                <p>新增供货信息前，<span style="color:red">必须先添加客户信息，</span>
+                    发货日期，发货数量，总价为必填字段。供货信息新增后，不能删除，
+                    已支付金额默认为0，在新增完成后可修改。
+                    可以下载已添加的供货信息到本地，下载文件名：供货信息+下载时间.xls。</p>
+                <h4>5.关于预测</h4>
+                <p>预测客户下一次供货时间，需要至少两次以上的供货记录。
+                    预测供货日期算法：
+                    最近一次供货数量/最近两次供货期间的日消耗+最近供货时间。</p>
+                <h4>6.关于统计</h4>
+                <p>可根据不同时间段统计全部客户或部分客户的供货数据，具体功能请自行体验。</p>
+                <h4>7.关于搜索</h4>
+                <p>搜索功能请自行体验。</p>
+            </div>
+            <div class="modal-footer text-center">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<div class="modal fade" id="uploadData" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">上传文件</h4>
+            </div>
+            <div class="modal-body">
+                <div class="container margin-10-10-10">
+                    <div class="row margin-10-10-10">
+                        <h4 class="text-danger">上传文件，将清空原有数据，请谨慎操作！
+                            上传文件格式为.xls,相应的模板请前往客户及供货页面下载。
+                        </h4>
+                        <div id="import" hidden></div>
+                        <form class="form-horizontal text-left margin-10-10-10">
+                            <div id="uploadMsg" class="text-center"></div>
+                            <div class="form-group margin-10-10-10" id="importCompanyDiv">
+                                <label  class="margin-10-10-10 input-lg">上传客户数据：</label>
+                                <button class="btn" data-dismiss="modal" onclick="loadCustomer()">去下载客户数据</button>
+                                <input type="file" id="uploadCompany" style="position:relative;left:50px;">
+                                <div id="companyUploadButton">
+                                </div>
+                            </div>
+                            <div class="form-group margin-10-10-10">
+                                <label  class="margin-10-10-10 input-lg">上传供货数据：</label>
+                                <button class="btn" data-dismiss="modal" onclick="loadShip()">去下载供货数据</button>
+                                <input type="file" id="uploadShip"  style="position:relative;left:50px;">
+                                <div id="shipUploadButton">
+                                </div>
+                            </div>
+
+                        </form>
+                    </div></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="close">关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
 <script>
+   // $("#importModal").load("common/uploadFile.html");
+    function sleep(d){
+        for(var t = Date.now();Date.now() - t <= d;);
+    };
+    function checkSign(){
+        user_id = sessionStorage.getItem('user_id')
+            if(!user_id){
+                alert('登录过期，请重新登录！');
+                signOut();
+            }
+    }
     $(document).ready(function () {
+            checkSign()
+            $('#userName').text(sessionStorage.getItem('user_name'))
             var nav = $('.navbar');
             var fm = $('#frame')
             var frame = document.getElementById('myFrame');
             frame.style.height = Math.floor(nav.offset().top -fm.offset().top-5) +'px';
+
         });
-    function loadMine(){
-        document.getElementById("myFrame").src="mine.html";
+    function loadCount(){
+        checkSign()
+        document.getElementById("myFrame").src="count.html";
+    };
+    function loadGuess(){
+        checkSign()
+        document.getElementById("myFrame").src="guess.html";
     };
     function loadCustomer(){
+        checkSign()
         document.getElementById("myFrame").src="company.html";
     };
     function loadShip(){
+        checkSign()
         document.getElementById("myFrame").src="ship.html";
     };
+    //window.setTimeout(function(){
+    //  $('#msg').remove();},3000);
 
 </script>
 <script src="../static/js/sign.js" type="text/javascript"></script>
+<script src="../static/js/upload.js" type="text/javascript"></script>
 </body>
+<script src="../static/js/company.js" type="text/javascript"></script>
+<script src="../static/js/ship.js" type="text/javascript"></script>
 </html>

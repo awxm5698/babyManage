@@ -1,0 +1,114 @@
+<div class="modal fade" id="addShip" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">新增供货</h4>
+            </div>
+            <div id="msg" class="text-center"></div>
+            <form class="form-horizontal" style="margin:20px 10px 10px" method="post"
+                  action="#">
+                <div class="form-group">
+                    <label for="selectCompany" class="col-xs-4 input-lg">公司名</label>
+                    <select name="selectCompany" id="selectCompany"
+                            class="col-xs-7 input-lg"
+                            style="/* position: absolute; *//* left: 102px; *//* top: 0; *//* z-index: 1; */"
+                            οnmοusedοwn="if(this.options.length>6){this.size=7}"
+                            οnblur="this.size=0" οnchange="this.size=0" required>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="shipDate" class="col-xs-4 input-lg">发货日期</label>
+                    <div class="col-xs-8">
+                        <input type="date" class="form-control input-lg date-picker"
+                               name="shipDate" id="shipDate"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="productName" class="col-xs-4 input-lg">产品名称</label>
+                    <div class="col-xs-8">
+                        <input type="text" class="form-control input-lg"
+                               placeholder="产品名称" name="productName"
+                               id="productName"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="productType" class="col-xs-4 input-lg">产品型号</label>
+                    <div class="col-xs-8">
+                        <input type="text" class="form-control input-lg"
+                               placeholder="产品型号" name="productType"
+                               id="productType"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="weight" class="col-xs-4 input-lg">发货数量</label>
+                    <div class="col-xs-4">
+                        <input type="text" class="form-control input-lg"
+                               placeholder="发货数" name="weight"
+                               id="weight" required/>
+                    </div>
+                    <div class="col-xs-4">
+                        <select id="unit" class=" input-lg">
+                            <option value="KG">KG</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="total" class="col-xs-4 input-lg">总价</label>
+                    <div class="col-xs-8">
+                        <input type="text" class="form-control input-lg"
+                               placeholder="总价" name="total"
+                               id="total" required/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="remarks" class="col-xs-4 input-lg">备注</label>
+                    <div class="col-xs-8">
+                <textarea class="form-control input-lg" placeholder="备注" name="remarks"
+                          id="remarks"></textarea>
+                    </div>
+                </div>
+                <div class="form-group text-center">
+                    <button type="button" class="btn btn-default btn-lg" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary btn-lg" onclick="addShip()">提交</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<script>
+    $(document).ready(function () {
+        var time = new Date();
+        var day = ("0" + time.getDate()).slice(-2);
+        var month = ("0" + (time.getMonth() + 1)).slice(-2);
+        var today = time.getFullYear() + "-" + (month) + "-" + (day);
+        $('.date-picker').val(today);
+    });
+    $(document).ready(function () {
+        db.transaction(function (tx) {
+            user_id = sessionStorage.getItem('user_id')
+            tx.executeSql('SELECT * FROM company where user_id=?',[user_id], function (tx, results) {
+                var len = results.rows.length, i;
+                if(len == 0)
+                {
+                    msg = '请先添加客户信息！';
+                    document.querySelector('#msg').innerHTML =  msg;
+                }
+                else
+                {
+                    company_option = '';
+                    for(i=0;i<len;i++){
+                        var company = results.rows.item(i).company;
+                        company_option = company_option + '<option value="'+company+'">'+company+'</option>';
+                    };
+
+                  document.querySelector('#selectCompany').innerHTML =  company_option;
+                };
+
+            });
+        });
+    });
+
+
+</script>

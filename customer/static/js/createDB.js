@@ -7,3 +7,10 @@ db.transaction(function (tx) {
     tx.executeSql('CREATE TABLE IF NOT EXISTS user(id integer primary key autoincrement, user_name, password)');
 
 });
+
+
+function doExecuteSql(sql){
+    db.transaction(function (tx) {
+        tx.executeSql(sql)
+    });
+};

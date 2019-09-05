@@ -35,6 +35,7 @@ function signIn(){
             {
                 msg = '<p>登录成功！</p>';
                 sessionStorage.setItem('user_id',results.rows.item(0).id)
+                sessionStorage.setItem('user_name',results.rows.item(0).user_name)
                 window.location.href="templates/home.html";
             }
             else

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>个人中心</title>
+    <script type="text/javascript" src="../static/js/header.js" charset="utf-8"></script>
+
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="navbar-header">
+        <div class="col-xs-12 bg-info text-center margin-down-10">
+            <label class="input-lg">预测</label>
+        </div>
+
+        <div class="col-xs-12 text-center margin-down-10">
+            <button class="btn btn-primary btn-lg" onclick="shipsGuess()">供货预测
+            </button>
+        </div>
+    </div>
+    <div id="navDownload"></div>
+    <div id="export" hidden></div>
+</nav>
+<div class="container  margin-top">
+    <div class="row img-rounded text-center margin-10-0-10" id="center"></div>
+</div>
+
+<div id="modal_0"></div>
+<div id="modal_1"></div>
+<div class="modal fade" id="shipsGuess" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">供货预测</h4>
+            </div>
+            <div class="modal-body">
+                <h4>通过前两次的供货日期间隔及供货数，简单预算下一次需要供货的日期</h4></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="../static/js/guess.js" type="text/javascript"></script>
+</body>
+<script>
+    $(document).ready(function () {
+        shipsGuess();
+    });
+
+</script>
+<script src="../static/js/company.js" type="text/javascript"></script>
+<script src="../static/js/ship.js" type="text/javascript"></script>
+
+</html>

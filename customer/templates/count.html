@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>个人中心</title>
+    <script type="text/javascript" src="../static/js/header.js" charset="utf-8"></script>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="navbar-header">
+        <div class="col-xs-12 bg-info text-center margin-down-10">
+            <label class="input-lg">统计</label>
+        </div>
+        <div class="col-xs-12 text-center margin-down-10">
+            <button class="btn btn-primary btn-lg" data-toggle="modal"
+                    data-target="#countModal">销售统计
+            </button>
+        </div>
+    </div>
+    <div id="navDownload"></div>
+    <div id="export" hidden></div>
+</nav>
+<div class="container  margin-top">
+    <div class="row img-rounded text-center margin-10-0-10" id="center"></div>
+</div>
+<div class="modal fade" id="countModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel1">销售统计</h4>
+            </div>
+            <div class="col-xs-12 input-lg margin-10-0-10">
+                开始：<input type="date" class="input-lg" id="startDate">
+            </div>
+            <div class="col-xs-12 input-lg margin-10-0-10">
+                结束：<input type="date" class="input-lg" id="endDate">
+            </div>
+            <div class="col-xs-12 input-lg margin-10-0-10">
+                公司：<input type="text" class="input-lg" id="searchCompany">
+            </div>
+            <div class="col-xs-3 text-center margin-10-0-10">
+                <button class="btn btn-default btn-lg" onclick="resetDate()">重置</button>
+            </div>
+            <div class="col-xs-3 text-left margin-10-0-10">
+                <button class="btn btn-default btn-primary btn-lg" onclick="saleCount()">统计
+                </button>
+            </div>
+            <div class="col-xs-3 text-center margin-10-0-10">
+                <button class="btn btn-primary btn-lg" onclick="exportCount('销售汇总')">下载
+                </button>
+            </div>
+            <div class="col-xs-3 text-center margin-10-0-10">
+                <button type="button" class="btn btn-default btn-lg" data-dismiss="modal">关闭</button>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<div id="modal_0"></div>
+<div id="modal_1"></div>
+
+<script src="../static/js/count.js" type="text/javascript"></script>
+</body>
+<script>
+    $(document).ready(function () {
+        saleCount();
+    });
+
+</script>
+<script src="../static/js/company.js" type="text/javascript"></script>
+<script src="../static/js/ship.js" type="text/javascript"></script>
+
+</html>
