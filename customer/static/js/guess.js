@@ -14,16 +14,31 @@ function shipsGuess(){
             {
                 var company_list=new Array();
                 for(i=0;i<len;i++){
-                    name = results.rows.item(i).company_name
-                    if(company_list.indexOf(name) == -1){
-                        company_list.push(name);
+                    company_id = results.rows.item(i).company_id
+                    if(company_list.indexOf(company_id) == -1){
+                        company_list.push(company_id);
                     };
                 };
                 var x=company_list.length
-//                table = '<h4 class="input-lg" data-toggle="modal" data-target="#shipsGuess">供货预测</h4>';
                 table = ''
                 for(i=0;i<x;i++){
-                    guessNextDay(company_list[i]);
+                    company = company_list[i]
+                    tx.executeSql('SELECT * FROM ships WHERE company_id=? and user_id=? order by id desc',
+                    [company,user_id], function (tx, new_results) {
+                        var new_len = new_results.rows.length, i;
+                        var product_list=new Array();
+                        for(j=0;j<new_len;j++){
+                            product_id = new_results.rows.item(j).product_id
+                            if(product_list.indexOf(product_id) == -1){
+                                product_list.push(product_id);
+                            };
+                        };
+                        var y = product_list.length
+                        for(k=0;k<y;k++){
+                            guessNextDay(company,product_list[k])
+                        };
+                    });
+
                 };
             };
         });
@@ -38,11 +53,14 @@ function dateAdd(startDate,addDays) {
     return nextStartDate;
 };
 
-function shipGuessTable(company,nextDay){
+function shipGuessTable(company,product_info,nextDay){
     table = '<table class="table table-bordered table-block input-lg">' +
-                '<tr>' +
-                    '<td class="nameBg">公司名称</td>' +
+                '<tr  style="background-color:#e9faff;">' +
+                    '<td>公司名称</td>' +
                     '<td>'+company+'</td>' +
+                '</tr><tr>' +
+                    '<td class="nameBg">产品信息</td>' +
+                    '<td>'+product_info+'</td>' +
                 '</tr><tr>' +
                     '<td class="nameBg">预计供货日期</td>' +
                     '<td style="color:red">'+nextDay+'</td>' +
@@ -50,25 +68,30 @@ function shipGuessTable(company,nextDay){
     return table
 };
 
-function guessNextDay(company_name){
+function guessNextDay(company_id,product_id){
     db.transaction(function (tx) {
-        tx.executeSql('SELECT * FROM ships WHERE company_name=? order by ship_date desc',
-        [company_name], function (tx, results) {
+        tx.executeSql('SELECT * FROM ships WHERE company_id=? and product_id=? order by ship_date desc',
+        [company_id,product_id], function (tx, results) {
             var len = results.rows.length, i;
             try {
-                ship_number = results.rows.item(1).weight
-                sDate1 = Date.parse(results.rows.item(0).ship_date);
-                sDate2 = Date.parse(results.rows.item(1).ship_date);
-                dateSpan = Math.abs(sDate2 - sDate1);
-                iDays = Math.floor(dateSpan / (24 * 3600 * 1000));
-                daysNeeded = Math.floor(results.rows.item(1).weight/iDays);
-                daysAdd = Math.floor(results.rows.item(0).weight/daysNeeded);
-                nextDay = dateAdd(results.rows.item(0).ship_date,daysAdd);
+                var ship_number = results.rows.item(1).weight
+                var sDate1 = Date.parse(results.rows.item(0).ship_date);
+                var sDate2 = Date.parse(results.rows.item(1).ship_date);
+                var dateSpan = Math.abs(sDate2 - sDate1);
+                var iDays = Math.floor(dateSpan / (24 * 3600 * 1000));
+                var daysNeeded = Math.floor(results.rows.item(1).weight/iDays);
+                var daysAdd = Math.floor(results.rows.item(0).weight/daysNeeded);
+                var nextDay = dateAdd(results.rows.item(0).ship_date,daysAdd);
             }
             catch{
                 nextDay = '供货次数太少，无法预测'
             }finally{
-                table = table + shipGuessTable(company_name,nextDay);
+                var company_name = results.rows.item(0).company_name;
+                var product_name = results.rows.item(0).product_name;
+                var product_type = results.rows.item(0).product_type;
+                var unit = results.rows.item(0).unit;
+                var product_info = product_name +"/"+product_type+"/"+unit
+                table = table + shipGuessTable(company_name,product_info,nextDay);
                 document.querySelector('#center').innerHTML =  table;
             }
 

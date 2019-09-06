@@ -1,0 +1,16 @@
+<div class="modal fade in" id="{0}" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true" style="display: block;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" onclick="deleteModalRemove()">&times;</button>
+                <h4 class="modal-title" >温馨提示</h4>
+            </div>
+            <div class="modal-body"><h5>数据将<span style="color:red">永久删除，不能恢复</span>，确定继续吗？</h5></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" onclick="deleteModalRemove()">关闭</button>
+                <button type="button" class="btn btn-danger" onclick=deleteCompany("{1}")>删除</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>

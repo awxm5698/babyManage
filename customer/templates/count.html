@@ -17,11 +17,14 @@
             </button>
         </div>
     </div>
-    <div id="navDownload"></div>
-    <div id="export" hidden></div>
+
 </nav>
 <div class="container  margin-top">
-    <div class="row img-rounded text-center margin-10-0-10" id="center"></div>
+    <div class="row">
+        <div class="col-xs-12 text-center margin-down-10" id="center">
+
+        </div>
+    </div>
 </div>
 <div class="modal fade" id="countModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -60,10 +63,15 @@
 </div>
 <div id="modal_0"></div>
 <div id="modal_1"></div>
-
+<div hidden>
+    <div id="navDownload"></div>
+    <div id="export" hidden></div>
+    <div id="countTable" hidden></div>
+</div>
 <script src="../static/js/count.js" type="text/javascript"></script>
 </body>
 <script>
+    $("#countTable").load("common/countTable.html")
     $(document).ready(function () {
         saleCount();
     });

@@ -1,29 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <!--<meta name="viewport" content="width=device-width, initial-scale=1,-->
-          <!--maximum-scale=1, user-scalable=no">-->
-    <title>客户中心</title>
+    <meta charset="utf-8">
+    <title>个人中心</title>
     <script type="text/javascript" src="../static/js/header.js" charset="utf-8"></script>
+
 </head>
 <body>
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="navbar-header">
         <div class="col-xs-12 bg-info text-center margin-down-10">
-            <label class="input-lg">客户列表</label>
+            <label class="input-lg">产品列表</label>
         </div>
         <div class="col-xs-6 text-center margin-down-10">
             <button class="btn btn-primary btn-lg" data-toggle="modal"
-                    data-target="#searchModal" id="search">搜索
-            </button>
+                    data-target="#searchModal">搜索</button>
         </div>
         <div class="col-xs-6 text-center margin-down-10">
             <button class="btn btn-primary btn-lg" data-toggle="modal"
-                    data-target="#addCompany">新客户</button>
+                    data-target="#addProduct">新产品</button>
         </div>
-
     </div>
+
 </nav>
 <div class="container  margin-top">
     <div class="row">
@@ -40,7 +38,7 @@
                 <h4 class="modal-title" id="myModalLabel">搜索</h4>
             </div>
             <div class="col-xs-12 margin-10-0-10">
-                <input type="text" id="searchText" class="input-lg input-block" placeholder="公司名称/联系人/电话号码">
+                <input type="text" id="searchText" class="input-lg input-block" placeholder="产品名称/型号">
             </div>
             <div class="col-xs-3 text-center margin-down-10">
                 <button class="btn btn-default btn-lg" onclick="resetText()">重置</button>
@@ -49,7 +47,7 @@
                 <button class="btn btn-primary btn-primary btn-lg" onclick="clickSearch()">搜索</button>
             </div>
             <div class="col-xs-3 text-center margin-down-10">
-                <button class="btn btn-primary btn-lg" onclick="exportCompany('客户记录')">下载
+                <button class="btn btn-primary btn-lg" onclick="exportProduct('产品数据')">下载
                 </button>
             </div>
             <div class="col-xs-3 text-center margin-down-10">
@@ -63,29 +61,29 @@
 </div>
 
 <div id="modal"></div>
-<div id="companyDetail"></div>
-<div id="companyDelete"></div>
+<div id="productDetail"></div>
+<div id="productDelete"></div>
+
 <div hidden>
-<div id="navDownload"></div>
-<div id="export" hidden></div>
-<div id="companyTableDemo" hidden></div>
-<div id="companyDetailDemo" hidden></div>
-<div id="companyDeleteDemo" hidden></div>
+    <div id="navDownload"></div>
+    <div id="export" hidden></div>
+    <div id="productTableDemo" hidden></div>
+    <div id="productDetailDemo" hidden></div>
+    <div id="productDeleteDemo" hidden></div>
 </div>
 <script>
-    $("#modal").load("common/addCompany.html");
-    $("#companyTableDemo").load("common/companyTable.html");
-    $("#companyDetailDemo").load("common/companyDetail.html");
-    $("#companyDeleteDemo").load("common/companyDelete.html");
+    $("#modal").load("common/addProduct.html");
+    $("#productTableDemo").load("common/productTable.html");
+    $("#productDetailDemo").load("common/productDetail.html");
+    $("#productDeleteDemo").load("common/productDelete.html");
 </script>
+<script src="../static/js/product.js"></script>
 <script>
     $(document).ready(function () {
-        var searchText = document.getElementById('searchText').value;
-        searchCompany(searchText)
+        // var searchText = document.getElementById('searchText').value;
+        searchProduct()
     });
 </script>
-<script type="text/javascript" src="../static/js/save.js" charset="utf-8"></script>
-
 </body>
-<script src="../static/js/company.js" type="text/javascript"></script>
+
 </html>

@@ -19,7 +19,9 @@ function getSaleCountSql(startDate,endDate,searchCompany){
     if(searchCompany!=""){
             condition = condition + " and company_name like '%"+searchCompany+"%' "
         }
-    sql = "select company_name, sum(weight) as total_weight,sum(total) as total_amount, sum(pay_total) as pay_amount from ships where user_id=? "+condition+" group by company_name"
+    sql = "select company_name,product_name,product_type,unit, sum(weight) as total_weight,sum(total) as total_amount,"+
+           "sum(pay_total) as pay_amount from ships where user_id=? "+
+           condition + " group by company_id,product_id"
     return sql
 };
 
@@ -33,45 +35,31 @@ function saleCount(startDate="",endDate="",searchCompany=""){
         tx.executeSql(sql,[user_id], function (tx, results) {
             var len = results.rows.length, i;
             if(len>0){
-//                table = '<h3 class="text-center">销售统计</h3>'+
-                table = '<table class="table table-bordered table-block input-lg" id="countTable">'
+                tableDemo = document.getElementById("countTable").innerHTML
+                table = ""
                 for(i=0;i<len;i++){
-                    table = table + saleCountTable(results.rows.item(i).company_name,
-                                                   results.rows.item(i).total_weight,
-                                                   results.rows.item(i).total_amount,
-                                                   results.rows.item(i).pay_amount);
-                    if(i<len-1){
-                        table = table + "<tr><td colspan='4'></td></tr>"
-                    }
+                    var company_name = results.rows.item(i).company_name
+                    var total_weight = results.rows.item(i).total_weight
+                    var total_amount = results.rows.item(i).total_amount
+                    var pay_amount = results.rows.item(i).pay_amount
+                    var product_name = results.rows.item(i).product_name
+                    var product_type = results.rows.item(i).product_type
+                    var unit = results.rows.item(i).unit
+                    var product_info = product_name+"/"+product_type+"/"+unit
+                    var total_remaining = total_amount -pay_amount
+                    table = table + tableDemo.replaceValue(company_name,product_info,
+                        total_weight,total_amount,pay_amount,total_remaining);
                 }
-                table = table + "</table>"
             }
             else
             {
                 table = "<p>搜索结果为空</p>"
             }
             document.querySelector('#center').innerHTML =  table ;
+            $('.modal').modal('hide')
         }, null);
 
     });
-};
-
-function saleCountTable(company,total_weight,total_amount,pay_amount){
-    table = '<tr>' +
-                '<td  class="nameBg">公司名称</td>' +
-                '<td colspan="3">'+company+'</td>' +
-            '</tr><tr>' +
-           		'<td class="nameBg">总发货量/KG</td>' +
-           		'<td>'+total_weight+'</td>' +
-           		'<td class="nameBg">总销售额</td>' +
-           		'<td>'+total_amount+'</td>' +
-           	'</tr><tr>' +
-           		'<td class="nameBg">已付款</td>' +
-           		'<td>'+pay_amount+'</td>' +
-           		'<td class="nameBg">待付款</td>' +
-           		'<td>'+(total_amount-pay_amount)+'</td>' +
-           	'</tr>'
-    return table
 };
 
 
@@ -111,13 +99,13 @@ function exportCount(fileName){
 };
 
 function exportTable(company_name,total_weight,total_amount,pay_amount,total_remaining){
-    console.log(total_remaining)
     table = "<tr>" +
-                "<td>{0}</td>".replaceValue(company_name) +
-                "<td>{0}</td>".replaceValue(total_weight) +
-                "<td>{0}</td>".replaceValue(total_amount) +
-                "<td>{0}</td>".replaceValue(pay_amount) +
-                "<td>{0}</td>".replaceValue(total_remaining) +
+                "<td>{0}</td>" +
+                "<td>{1}</td>" +
+                "<td>{2}</td>" +
+                "<td>{3}</td>" +
+                "<td>{4}</td>" +
             "</tr>"
+    table = table.replaceValue(company_name,total_weight,total_amount,pay_amount,total_remaining)
     return table
 }

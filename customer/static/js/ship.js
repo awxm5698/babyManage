@@ -1,24 +1,34 @@
 document.write("<script  src='../static/js/format.js'></script>");
 
 function addShip(){
-    var company_name = document.getElementById('selectCompany').value;
+    var company = document.getElementById('selectCompany')
+    var company_id = company.value;
+    var company_name = company[company.selectedIndex].text;
+    var product = document.getElementById('selectProduct')
+    var product_id = product.value;
     var ship_date = document.getElementById('shipDate').value;
-    var product_name = document.getElementById('productName').value;
-    var product_type = document.getElementById('productType').value;
+//    var product_name = document.getElementById('productName').value;
+//    var product_type = document.getElementById('productType').value;
     var weight = document.getElementById('weight').value;
     var total = document.getElementById('total').value;
     var remarks = document.getElementById('remarks').value;
+    var user_id = sessionStorage.getItem('user_id')
     if(company_name!='' && weight!='' && total!='')
     {
         db.transaction(function (tx) {
-
-            user_id = sessionStorage.getItem('user_id')
-            tx.executeSql("INSERT INTO ships(user_id,company_name,ship_date,product_name,product_type,weight,total,pay_total,remarks) values (?,?,?,?,?,?,?,?,?)",
-                           [user_id,company_name, ship_date, product_name,product_type,weight,total,0,remarks]);
-            msg = '<p>供货记录添加成功！</p>';
-            document.querySelector('#msg').innerHTML =  msg;
-            window.location.href="ship.html";
-
+            tx.executeSql('SELECT * FROM product WHERE id=?',
+            [product_id], function (tx, results) {
+                var len = results.rows.length, i;
+                var product_name = results.rows.item(0).product_name
+                var product_type = results.rows.item(0).product_type
+                var unit = results.rows.item(0).unit
+                tx.executeSql("INSERT INTO ships(user_id,company_id,company_name,ship_date,product_id,product_name,"+
+                "product_type,unit,weight,total,pay_total,remarks) values (?,?,?,?,?,?,?,?,?,?,?,?)",
+                                           [user_id,company_id,company_name, ship_date, product_id,product_name,product_type,unit,weight,total,0,remarks]);
+                msg = '<p>供货记录添加成功！</p>';
+                document.querySelector('#msg').innerHTML =  msg;
+                window.location.href="ship.html";
+            });
         });
     }
     else if(weight=='')
@@ -33,45 +43,15 @@ function addShip(){
     }
 };
 
-
-function shipTable(ship_id,company_name,ship_date,product_name,product_type,total,pay_total,remarks){
-    table =     "<tr>" +
-            		"<td class='nameBg'>公司名称</td>" +
-            		"<td colspan='3' class='text-left'>{0}<button class='btn btn-info' style='position:absolute;left:300px;' onclick='getShipDetail(\"{1}\")'>编辑</button>".replaceValue(company_name,ship_id)+"</td>"+
-            	"</tr><tr>" +
-            		"<td class='nameBg'>产品名称</td>" +
-            		"<td class='text-left'>{0}</td>".replaceValue(product_name) +
-            		"<td class='nameBg'>产品型号</td>" +
-            		"<td class='text-left'>{0}</td>".replaceValue(product_type) +
-            	"</tr><tr>" +
-                    "<td class='nameBg'>发货时间</td>" +
-                    "<td>{0}</td>".replaceValue(ship_date) +
-                    "<td class='nameBg'>总价</td>" +
-                    "<td>{0}</td>".replaceValue(total) +
-                "</tr><tr>" +
-            		"<td class='nameBg'>已付金额</td>" +
-            		"<td>{0}</td>".replaceValue(pay_total) +
-            		"<td class='nameBg'>未付金额</td>" +
-            		"<td>{0}</td>".replaceValue(total-pay_total) +
-            	"</tr><tr>" +
-            		"<td class='nameBg'>备注</td>" +
-            		"<td colspan='3' class='text-left'>{0}</td>".replaceValue(remarks) +
-            	"</tr>"
-    return table
-};
 function updateShip(ship_id){
-    var company_name = document.getElementById('new_selectCompany').value;
     var ship_date = document.getElementById('new_shipDate').value;
-    var product_name = document.getElementById('new_productName').value;
-    var product_type = document.getElementById('new_productType').value;
     var weight = document.getElementById('new_weight').value;
     var total = document.getElementById('new_total').value;
     var pay_total = document.getElementById('new_pay_total').value;
     var remarks = document.getElementById('new_remarks').value;
-    sql = "update ships set company_name=?,ship_date=?,product_name=?,"+
-          "product_type=?,weight=?,total=?,pay_total=?,remarks=? where id=?"
+    sql = "update ships set ship_date=?,weight=?,total=?,pay_total=?,remarks=? where id=?"
     db.transaction(function (tx) {
-        tx.executeSql(sql,[company_name, ship_date, product_name,product_type,weight,total,pay_total,remarks,ship_id]);
+        tx.executeSql(sql,[ship_date,weight,total,pay_total,remarks,ship_id]);
         msg = '<p>供货记录修改成功！</p>';
         document.querySelector('#msg').innerHTML =  msg;
         window.location.href="ship.html";
@@ -80,20 +60,33 @@ function updateShip(ship_id){
     });
 
 };
-function deleteShip(ship_id){
-    sql = "delete from ships where id='"+ship_id+"';"
-    doExecuteSql(sql);
-    updateShipRemove();
-    clickSearch();
-};
+
 
 function updateShipRemove(){
   document.querySelector('#updateShip').remove();
   document.getElementsByTagName("body").className='';
 };
 
+function deleteShipModalRemove(){
+    document.querySelector('#deleteModal').remove();
+};
+
+function deleteShip(ship_id){
+    sql = "delete from ships where id='"+ship_id+"';"
+    doExecuteSql(sql);
+    deleteShipModalRemove();
+    updateShipRemove();
+    clickSearch();
+};
+
+function getShipDeleteModal(ship_id){
+    modal = document.getElementById('shipDeleteDemo').innerHTML
+    modal = modal.replaceValue('deleteModal',ship_id)
+    document.querySelector('#shipDelete').innerHTML =  modal;
+}
 
 function getShipDetail(ship_id){
+    shipDetailDemo = document.getElementById('shipDetailDemo').innerHTML
     db.transaction(function (tx) {
         tx.executeSql('SELECT * FROM ships WHERE id=?',[ship_id], function (tx, results) {
             var len = results.rows.length, i;
@@ -101,91 +94,16 @@ function getShipDetail(ship_id){
             var ship_date = results.rows.item(0).ship_date
             var product_name = results.rows.item(0).product_name
             var product_type = results.rows.item(0).product_type
+            var unit = results.rows.item(0).unit
             var weight = results.rows.item(0).weight
             var total = results.rows.item(0).total
             var pay_total = results.rows.item(0).pay_total
             var remarks = results.rows.item(0).remarks
-            modal = shipDetail(ship_id,company_name,ship_date,product_name,product_type,weight,total,pay_total,remarks)
+            modal = shipDetailDemo.replaceValue(ship_id,company_name,ship_date,product_name,product_type,unit,weight,total,pay_total,remarks,"updateShip")
             document.querySelector('#shipDetail').innerHTML =  modal;
             document.getElementsByTagName("body").className='modal-open'
         });
     });
-};
-
-function shipDetail(ship_id,company_name,ship_date,product_name,product_type,weight,total,pay_total,remarks){
-    modal = '<div class="modal fade in" id="updateShip" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: block; overflow-y: scroll">' +
-                '<div class="modal-dialog">' +
-                    '<div class="modal-content">' +
-                        '<div class="modal-header">' +
-                            '<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>' +
-                            '<h4 class="modal-title" id="myModalLabel">供货详情</h4>' +
-                        '</div>' +
-                        '<div id="msg" class="text-center"></div>' +
-                        '<form class="form-horizontal" style="margin:20px 10px 10px" method="post" action="#">' +
-                            '<div class="form-group text-center">' +
-                                '<button type="button" class="btn btn-danger btn-lg margin-0-10-0" onclick=deleteShip("'+ship_id+'")>删除</button>' +
-                                '<button type="button" class="btn btn-default btn-lg margin-0-10-0" data-dismiss="modal" onclick="updateShipRemove()">关闭</button>' +
-                                '<button type="button" class="btn btn-primary btn-lg margin-0-10-0" onclick=updateShip("'+ship_id+'")>提交</button>' +
-                            '</div>' +
-                            '<div class="form-group">' +
-                                '<label for="new_selectCompany" class="col-xs-4 input-lg">公司名</label>' +
-            					'<div class="col-xs-8">' +
-            					'<input type="text" class="form-control input-lg" name="new_selectCompany" id="new_selectCompany" value="'+company_name +'"/>' +
-                                '</div>' +
-                            '</div>' +
-                            '<div class="form-group">' +
-                                '<label for="new_shipDate" class="col-xs-4 input-lg">发货日期</label>' +
-                                '<div class="col-xs-8">' +
-                                    '<input type="date" class="form-control input-lg date-picker" name="new_shipDate" id="new_shipDate" value="'+ship_date+'"/>' +
-                                '</div>' +
-                            '</div>' +
-                            '<div class="form-group">' +
-                                '<label for="new_productName" class="col-xs-4 input-lg">产品名称</label>' +
-                                '<div class="col-xs-8">' +
-                                    '<input type="text" class="form-control input-lg"placeholder="产品名称" name="new_productName" id="new_productName" value="'+product_name+'"/>' +
-                                '</div>' +
-                            '</div>' +
-                            '<div class="form-group">' +
-                                '<label for="new_productType" class="col-xs-4 input-lg">产品型号</label>' +
-                                '<div class="col-xs-8">' +
-                                    '<input type="text" class="form-control input-lg" placeholder="产品型号" name="new_productType" id="new_productType" value="'+product_type+'" />' +
-                                '</div>' +
-                            '</div>' +
-                            '<div class="form-group">' +
-                                '<label for="new_weight" class="col-xs-4 input-lg">发货数量</label>' +
-                                '<div class="col-xs-4">' +
-                                    '<input type="text" class="form-control input-lg" placeholder="发货数" name="new_weight" id="new_weight"  value="'+weight+'" required/>' +
-                                '</div>' +
-                                '<div class="col-xs-4">' +
-                                    '<select id="unit" class=" input-lg">' +
-                                        '<option value="KG">KG</option>' +
-                                    '</select>' +
-                                '</div>' +
-                            '</div>' +
-                            '<div class="form-group">' +
-                                '<label for="new_total" class="col-xs-4 input-lg">总价</label>' +
-                                '<div class="col-xs-8">' +
-                                    '<input type="text" class="form-control input-lg" placeholder="总价" name="new_total" id="new_total" value="'+total+'" required/>' +
-                                '</div>' +
-                            '</div>' +
-                            '<div class="form-group">' +
-                                    '<label for="new_pay_total" class="col-xs-4 input-lg">已付款</label>' +
-                                    '<div class="col-xs-8">' +
-                                        '<input type="text" class="form-control input-lg" placeholder="已付款金额" name="new_pay_total" id="new_pay_total" value="'+pay_total+'" />' +
-                                    '</div>' +
-                                '</div>' +
-                            '<div class="form-group">' +
-                                '<label for="new_remarks" class="col-xs-4 input-lg">备注</label>' +
-                                '<div class="col-xs-8">' +
-                            '<textarea class="form-control input-lg" placeholder="备注" name="new_remarks" id="new_remarks">'+remarks +'</textarea>' +
-                                '</div>' +
-                            '</div>' +
-
-                        '</form>' +
-                    '</div>' +
-                '</div>' +
-            '</div>'
-    return modal
 };
 
 function clickSearch(){
@@ -193,7 +111,9 @@ function clickSearch(){
         var endDate = document.getElementById('endDate').value;
         var isPay = document.getElementById('isPay').value;
         var searchCompany = document.getElementById('searchCompany').value;
-        searchShips(startDate,endDate,isPay,searchCompany);
+        var searchProduct = document.getElementById('searchProduct').value
+        searchShips(startDate,endDate,isPay,searchCompany,searchProduct);
+        $('.modal').modal('hide')
     };
 
 function resetDate(){
@@ -201,10 +121,11 @@ function resetDate(){
     document.getElementById('endDate').value = "";
     document.getElementById('isPay').value = "0";
     document.getElementById('searchCompany').value = "";
+    document.getElementById('searchProduct').value = "";
     searchShips();
 };
 
-function getSearchShipsSql(startDate,endDate,isPay,searchCompany){
+function getSearchShipsSql(startDate,endDate,isPay,searchCompany,searchProduct){
     if(startDate==""&&endDate==""){
         var condition = ""
     }
@@ -229,13 +150,16 @@ function getSearchShipsSql(startDate,endDate,isPay,searchCompany){
     if(searchCompany!=""){
         condition = condition + " and company_name like '%"+searchCompany+"%' "
     }
+    if(searchProduct!=""){
+        condition = condition + " and (product_name like '%"+searchProduct+"%' or product_type like '%"+searchProduct+"%')"
+    }
     sql = 'SELECT * FROM ships WHERE user_id=? '+condition+' order by ship_date desc'
     return sql
 };
 
-function searchShips(startDate="",endDate="",isPay=0,searchCompany=""){
+function searchShips(startDate="",endDate="",isPay=0,searchCompany="",searchProduct=""){
     user_id = sessionStorage.getItem('user_id');
-    sql = getSearchShipsSql(startDate,endDate,isPay,searchCompany);
+    sql = getSearchShipsSql(startDate,endDate,isPay,searchCompany,searchProduct);
     db.transaction(function (tx) {
         tx.executeSql(sql, [user_id], function (tx, results) {
             var len = results.rows.length, i;
@@ -247,22 +171,24 @@ function searchShips(startDate="",endDate="",isPay=0,searchCompany=""){
                 }
                 else
                 {
-                    table = "<table class='table table-bordered table-block input-lg' id='shipsTable'>"
+                    tableDemo = document.getElementById('shipTableDemo').innerHTML
+                    table = ""
                     for(i=0;i<len;i++){
                         var ship_id = results.rows.item(i).id
                         var company_name = results.rows.item(i).company_name
                         var ship_date = results.rows.item(i).ship_date
                         var product_name = results.rows.item(i).product_name
                         var product_type = results.rows.item(i).product_type
+                        var unit = results.rows.item(i).unit
+                        var weight = results.rows.item(i).weight
                         var total = results.rows.item(i).total
                         var pay_total = results.rows.item(i).pay_total
                         var remarks = results.rows.item(i).remarks
-                        table = table + shipTable(ship_id,company_name,ship_date,product_name,product_type,total,pay_total,remarks)
-                        if(i<len-1){
-                            table = table + "<tr><td colspan='4'></td></tr>"
-                        };
+                        var product_info = product_name+'/'+product_type+'/'+unit
+                        var remaining = total - pay_total
+                        table = table + tableDemo.replaceValue(ship_id,company_name,
+                        ship_date,product_info,weight,total,pay_total,remaining,remarks)
                     };
-                    table = table + "</table>"
                     document.querySelector('#center').innerHTML =  table;
                 };
         }, null);
@@ -305,6 +231,7 @@ function exportShip(fileName){
               table = table + exportTable(company_name,ship_date,product_name,product_type,weight,total,pay_total,remarks)
           };
           table = table + '<tr><td>时间</td><td>'+(startDate==""?'-':startDate)+'至'+(endDate==""?'-':endDate)+'</td></tr></table>';
+          console.log(table)
           document.querySelector('#export').innerHTML =  table;
           downloadExcel("exportTable",fileName)
           document.getElementById('exportTable').remove();
@@ -316,15 +243,16 @@ function exportShip(fileName){
 function exportTable(company_name,ship_date,product_name,product_type,weight,total,pay_total,remarks){
     remaining = total - pay_total
     table = "<tr>" +
-                "<td>{0}</td>".replaceValue(company_name) +
-                "<td>{0}</td>".replaceValue(ship_date) +
-                "<td>{0}</td>".replaceValue(product_name) +
-                "<td>{0}</td>".replaceValue(product_type) +
-                "<td>{0}</td>".replaceValue(weight) +
-                "<td>{0}</td>".replaceValue(total) +
-                "<td>{0}</td>".replaceValue(pay_total) +
-                "<td>{0}</td>".replaceValue(remaining) +
-                "<td>{0}</td>".replaceValue(remarks) +
+                "<td>{0}</td>" +
+                "<td>{1}</td>" +
+                "<td>{2}</td>" +
+                "<td>{3}</td>" +
+                "<td>{4}</td>" +
+                "<td>{5}</td>" +
+                "<td>{6}</td>" +
+                "<td>{7}</td>" +
+                "<td>{8}</td>" +
             "</tr>"
+    table = table.replaceValue(company_name,ship_date,product_name,product_type,weight,total,pay_total,remaining,remarks)
     return table
 }

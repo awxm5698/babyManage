@@ -9,8 +9,17 @@
             <form class="form-horizontal" style="margin:20px 10px 10px" method="post"
                   action="#">
                 <div class="form-group">
-                    <label for="selectCompany" class="col-xs-4 input-lg">公司名</label>
+                    <label for="selectCompany" class="col-xs-4 input-lg">公司名称</label>
                     <select name="selectCompany" id="selectCompany"
+                            class="col-xs-7 input-lg"
+                            style="/* position: absolute; *//* left: 102px; *//* top: 0; *//* z-index: 1; */"
+                            οnmοusedοwn="if(this.options.length>6){this.size=7}"
+                            οnblur="this.size=0" οnchange="this.size=0" required>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="selectProduct" class="col-xs-4 input-lg">产品信息</label>
+                    <select name="selectProduct" id="selectProduct"
                             class="col-xs-7 input-lg"
                             style="/* position: absolute; *//* left: 102px; *//* top: 0; *//* z-index: 1; */"
                             οnmοusedοwn="if(this.options.length>6){this.size=7}"
@@ -24,34 +33,35 @@
                                name="shipDate" id="shipDate"/>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="productName" class="col-xs-4 input-lg">产品名称</label>
-                    <div class="col-xs-8">
-                        <input type="text" class="form-control input-lg"
-                               placeholder="产品名称" name="productName"
-                               id="productName"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="productType" class="col-xs-4 input-lg">产品型号</label>
-                    <div class="col-xs-8">
-                        <input type="text" class="form-control input-lg"
-                               placeholder="产品型号" name="productType"
-                               id="productType"/>
-                    </div>
-                </div>
+
+                <!--<div class="form-group">-->
+                    <!--<label for="productName" class="col-xs-4 input-lg">产品名称</label>-->
+                    <!--<div class="col-xs-8">-->
+                        <!--<input type="text" class="form-control input-lg"-->
+                               <!--placeholder="产品名称" name="productName"-->
+                               <!--id="productName"/>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="form-group">-->
+                    <!--<label for="productType" class="col-xs-4 input-lg">产品型号</label>-->
+                    <!--<div class="col-xs-8">-->
+                        <!--<input type="text" class="form-control input-lg"-->
+                               <!--placeholder="产品型号" name="productType"-->
+                               <!--id="productType"/>-->
+                    <!--</div>-->
+                <!--</div>-->
                 <div class="form-group">
                     <label for="weight" class="col-xs-4 input-lg">发货数量</label>
-                    <div class="col-xs-4">
+                    <div class="col-xs-8">
                         <input type="text" class="form-control input-lg"
                                placeholder="发货数" name="weight"
                                id="weight" required/>
                     </div>
-                    <div class="col-xs-4">
-                        <select id="unit" class=" input-lg">
-                            <option value="KG">KG</option>
-                        </select>
-                    </div>
+                    <!--<div class="col-xs-4">-->
+                        <!--<select id="unit" class=" input-lg">-->
+                            <!--<option value="KG">KG</option>-->
+                        <!--</select>-->
+                    <!--</div>-->
                 </div>
                 <div class="form-group">
                     <label for="total" class="col-xs-4 input-lg">总价</label>
@@ -69,8 +79,8 @@
                     </div>
                 </div>
                 <div class="form-group text-center">
-                    <button type="button" class="btn btn-default btn-lg" data-dismiss="modal">关闭</button>
-                    <button type="button" class="btn btn-primary btn-lg" onclick="addShip()">提交</button>
+                    <button type="button" class="btn btn-default btn-lg margin-0-10-0" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary btn-lg margin-0-10-0" onclick="addShip()">提交</button>
                 </div>
             </form>
         </div><!-- /.modal-content -->
@@ -92,18 +102,41 @@
                 var len = results.rows.length, i;
                 if(len == 0)
                 {
-                    msg = '请先添加客户信息！';
+                    msg = '请添加客户信息！';
                     document.querySelector('#msg').innerHTML =  msg;
                 }
                 else
                 {
                     company_option = '';
                     for(i=0;i<len;i++){
+                        var company_id = results.rows.item(i).id;
                         var company = results.rows.item(i).company;
-                        company_option = company_option + '<option value="'+company+'">'+company+'</option>';
+                        company_option = company_option + '<option value="'+company_id+'">'+company+'</option>';
                     };
 
                   document.querySelector('#selectCompany').innerHTML =  company_option;
+                };
+
+            });
+            tx.executeSql('SELECT * FROM product',[], function (tx, results) {
+                var len = results.rows.length, i;
+                if(len == 0)
+                {
+                    msg = '请添加产品信息！';
+                    document.querySelector('#msg').innerHTML =  msg;
+                }
+                else
+                {
+                    company_option = '';
+                    for(i=0;i<len;i++){
+                        var product_id = results.rows.item(i).id;
+                        var product_name = results.rows.item(i).product_name;
+                        var product_type = results.rows.item(i).product_type;
+                        var unit = results.rows.item(i).unit;
+                        company_option = company_option + '<option value="'+product_id+'">'+product_name+'/'+product_type+'/'+unit+'</option>';
+                    };
+
+                  document.querySelector('#selectProduct').innerHTML =  company_option;
                 };
 
             });
