@@ -1,8 +1,10 @@
 .margin-top{margin:140px 0 10px;}
 .margin-down-10{margin:0 0 10px;}
 .margin-10-0-10{margin:10px 0 10px;}
-.nameBg{background:#f3f3f3 !important;font-weight:bold;}
 .margin-10-10-10{margin:10px 10px 10px;}
 .nav_foot{float:left;width:25%;text-align: center}
 .margin-0-10-0{margin:0 10px 0;}
-
+.margin-20-10-10{margin:20px 10px 10px;}
+.position-right-20{position:absolute;right:20px;}
+.bg-td{background:#f3f3f3 !important;font-weight:bold;}
+.bg-th{background-color:#e9faff;}

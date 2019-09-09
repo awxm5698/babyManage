@@ -47,8 +47,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="myModalLabel">搜索</h4>
             </div>
-            <form class="form-horizontal" style="margin:20px 10px 10px" method="post"
-                  action="#">
+            <form class="form-horizontal margin-20-10-10">
                 <div class="form-group">
                     <div class="col-xs-3">
                         <label for="startDate">开始：</label></div>
@@ -90,29 +89,24 @@
                         <input type="text" class="form-control input-lg" id="searchProduct">
                     </div>
                 </div>
-                <div class="form-group">
-                    <div class="col-xs-3 text-center">
-                        <button class="btn btn-default btn-block" onclick="resetDate()">重置</button>
-                    </div>
-                    <div class="col-xs-3 text-center">
-                        <button class="btn btn-primary btn-block" onclick="clickSearch()">搜索</button>
-                    </div>
-                    <div class="col-xs-3 text-center">
-                        <button class="btn btn-primary btn-block" onclick="exportShip('供货记录')">下载
-                        </button>
-                    </div>
-                    <div class="col-xs-3 text-center">
-                        <button type="button" class="btn btn-defaul btn-block" data-dismiss="modal">关闭</button>
-                    </div>
-                </div></form>
+            </form>
+            <div class="modal-footer">
+                <div class="col-xs-3 ">
+                    <button class="btn btn-default" onclick="resetDate()">重置</button>
+                </div>
+                <div class="col-xs-3 ">
+                    <button class="btn btn-primary" onclick="clickSearchShips()">搜索</button>
+                </div>
+                <div class="col-xs-3 ">
+                    <button class="btn btn-primary" onclick="exportShip('供货记录')">下载
+                    </button>
+                </div>
+                <div class="col-xs-3 ">
+                    <button type="button" class="btn btn-defaul" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
         </div>
     </div>
-
-    <div class="modal-footer">
-
-    </div>
-</div><!-- /.modal-content -->
-</div><!-- /.modal -->
 </div>
 
 <div id="modal"></div>
@@ -138,6 +132,7 @@
         searchShips(startDate,endDate);
 
     });
+
 
 
 

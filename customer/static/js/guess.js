@@ -76,15 +76,15 @@ function dateAdd(startDate,addDays) {
 };
 
 function shipGuessTable(company,product_info,nextDay){
-    table = '<table class="table table-bordered table-block input-lg">' +
-                '<tr  style="background-color:#e9faff;">' +
+    table = '<table class="table table-bordered table-block">' +
+                '<tr  class="bg-th">' +
                     '<td>公司名称</td>' +
                     '<td>'+company+'</td>' +
                 '</tr><tr>' +
-                    '<td class="nameBg">产品信息</td>' +
+                    '<td class="bg-td">产品信息</td>' +
                     '<td>'+product_info+'</td>' +
                 '</tr><tr>' +
-                    '<td class="nameBg">预计供货日期</td>' +
+                    '<td class="bg-td">预计供货日期</td>' +
                     '<td style="color:red">'+nextDay+'</td>' +
                 '</tr></table>'
     return table

@@ -58,7 +58,7 @@ function updateShip(ship_id){
         document.querySelector('#msg').innerHTML =  msg;
         window.location.href="ship.html";
         updateShipRemove();
-        clickSearch();
+        clickSearchShips();
     });
 
 };
@@ -108,7 +108,7 @@ function getShipDetail(ship_id){
     });
 };
 
-function clickSearch(){
+function clickSearchShips(){
         var startDate = document.getElementById('startDate').value;
         var endDate = document.getElementById('endDate').value;
         var isPay = document.getElementById('isPay').value;
@@ -162,6 +162,7 @@ function getSearchShipsSql(startDate,endDate,isPay,searchCompany,searchProduct){
 function searchShips(startDate="",endDate="",isPay=0,searchCompany="",searchProduct=""){
     user_id = sessionStorage.getItem('user_id');
     sql = getSearchShipsSql(startDate,endDate,isPay,searchCompany,searchProduct);
+
     db.transaction(function (tx) {
         tx.executeSql(sql, [user_id], function (tx, results) {
             var len = results.rows.length, i;

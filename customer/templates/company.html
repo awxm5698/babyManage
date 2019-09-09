@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <!--<meta name="viewport" content="width=device-width, initial-scale=1,-->
-          <!--maximum-scale=1, user-scalable=no">-->
+    <!--maximum-scale=1, user-scalable=no">-->
     <title>客户中心</title>
     <script type="text/javascript" src="../static/js/header.js" charset="utf-8"></script>
 </head>
@@ -20,7 +20,8 @@
         </div>
         <div class="col-xs-6 text-center margin-down-10">
             <button class="btn btn-primary btn-lg" data-toggle="modal"
-                    data-target="#addCompany">新客户</button>
+                    data-target="#addCompany">新客户
+            </button>
         </div>
 
     </div>
@@ -39,23 +40,28 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="myModalLabel">搜索</h4>
             </div>
-            <div class="col-xs-12 margin-10-0-10">
-                <input type="text" id="searchText" class="input-lg" placeholder="公司名称/联系人/电话号码">
-            </div>
-            <div class="col-xs-3 text-center margin-down-10">
-                <button class="btn btn-default btn-block" onclick="resetText()">重置</button>
-            </div>
-            <div class="col-xs-3 text-center  margin-down-10">
-                <button class="btn btn-primary btn-block" onclick="clickSearch()">搜索</button>
-            </div>
-            <div class="col-xs-3 text-center margin-down-10">
-                <button class="btn btn-primary btn-block" onclick="exportCompany('客户记录')">下载
-                </button>
-            </div>
-            <div class="col-xs-3 text-center margin-down-10">
-                <button type="button" class="btn btn-default btn-block" data-dismiss="modal">关闭</button>
-            </div>
+            <form class="form-horizontal margin-20-10-10">
+                <div class="form-group">
+                    <div class="col-xs-12">
+                        <input type="text" id="searchText" class="input-lg" placeholder="公司名称/联系人/电话号码">
+                    </div>
+                </div>
+            </form>
             <div class="modal-footer">
+                <div class="col-xs-3 text-center">
+                    <button class="btn btn-default" onclick="resetText()">重置</button>
+                </div>
+                <div class="col-xs-3 text-center ">
+                    <button class="btn btn-primary" onclick="clickSearch()">搜索</button>
+                </div>
+                <div class="col-xs-3 text-center">
+                    <button class="btn btn-primary" onclick="exportCompany('客户记录')">下载
+                    </button>
+                </div>
+                <div class="col-xs-3 text-center">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+
 
             </div>
         </div><!-- /.modal-content -->
@@ -66,23 +72,27 @@
 <div id="companyDetail"></div>
 <div id="companyDelete"></div>
 <div hidden>
-<div id="navDownload"></div>
-<div id="export" hidden></div>
-<div id="companyTableDemo" hidden></div>
-<div id="companyDetailDemo" hidden></div>
-<div id="companyDeleteDemo" hidden></div>
+    <div id="navDownload"></div>
+    <div id="export" hidden></div>
+    <div id="companyTableDemo" hidden></div>
+    <div id="companyDetailDemo" hidden></div>
+    <div id="companyDeleteDemo" hidden></div>
 </div>
 <script>
     $("#modal").load("common/addCompany.html");
     $("#companyTableDemo").load("common/companyTable.html");
     $("#companyDetailDemo").load("common/companyDetail.html");
     $("#companyDeleteDemo").load("common/companyDelete.html");
+
+
 </script>
 <script>
     $(document).ready(function () {
         var searchText = document.getElementById('searchText').value;
         searchCompany(searchText)
     });
+
+
 </script>
 <script type="text/javascript" src="../static/js/save.js" charset="utf-8"></script>
 

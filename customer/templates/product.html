@@ -14,11 +14,13 @@
         </div>
         <div class="col-xs-6 text-center margin-down-10">
             <button class="btn btn-primary btn-lg" data-toggle="modal"
-                    data-target="#searchModal">搜索</button>
+                    data-target="#searchModal">搜索
+            </button>
         </div>
         <div class="col-xs-6 text-center margin-down-10">
             <button class="btn btn-primary btn-lg" data-toggle="modal"
-                    data-target="#addProduct">新产品</button>
+                    data-target="#addProduct">新产品
+            </button>
         </div>
     </div>
 
@@ -37,23 +39,28 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="myModalLabel">搜索</h4>
             </div>
-            <div class="col-xs-12 margin-10-0-10">
-                <input type="text" id="searchText" class="input-lg input-block" placeholder="产品名称/型号">
-            </div>
-            <div class="col-xs-3 text-center">
-                <button class="btn btn-default btn-block" onclick="resetText()">重置</button>
-            </div>
-            <div class="col-xs-3 text-center ">
-                <button class="btn btn-primary btn-block" onclick="clickSearch()">搜索</button>
-            </div>
-            <div class="col-xs-3 text-center">
-                <button class="btn btn-primary btn-block" onclick="exportProduct('产品数据')">下载
-                </button>
-            </div>
-            <div class="col-xs-3 text-center">
-                <button type="button" class="btn btn-default btn-block" data-dismiss="modal">关闭</button>
-            </div>
+            <form class="form-horizontal margin-20-10-10">
+                <div class="form-group">
+                    <div class="col-xs-12 margin-10-0-10">
+                        <input type="text" id="searchText" class="input-lg input-block" placeholder="产品名称/型号">
+                    </div>
+                </div>
+            </form>
             <div class="modal-footer">
+                <div class="col-xs-3 text-center">
+                    <button class="btn btn-default" onclick="resetText()">重置</button>
+                </div>
+                <div class="col-xs-3 text-center ">
+                    <button class="btn btn-primary" onclick="clickSearch()">搜索</button>
+                </div>
+                <div class="col-xs-3 text-center">
+                    <button class="btn btn-primary" onclick="exportProduct('产品数据')">下载
+                    </button>
+                </div>
+                <div class="col-xs-3 text-center">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+
 
             </div>
         </div><!-- /.modal-content -->
@@ -76,6 +83,7 @@
     $("#productTableDemo").load("common/productTable.html");
     $("#productDetailDemo").load("common/productDetail.html");
     $("#productDeleteDemo").load("common/productDelete.html");
+
 </script>
 <script src="../static/js/product.js"></script>
 <script>
@@ -83,6 +91,7 @@
         // var searchText = document.getElementById('searchText').value;
         searchProduct()
     });
+
 </script>
 </body>
 
