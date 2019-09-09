@@ -16,15 +16,18 @@ function addShip(){
     if(company_name!='' && weight!='' && total!='')
     {
         db.transaction(function (tx) {
-            tx.executeSql('SELECT * FROM product WHERE id=?',
-            [product_id], function (tx, results) {
+            tx.executeSql('SELECT * FROM product WHERE id=?',[product_id], function (tx, results) {
                 var len = results.rows.length, i;
                 var product_name = results.rows.item(0).product_name
                 var product_type = results.rows.item(0).product_type
                 var unit = results.rows.item(0).unit
+                var commission_rate = results.rows.item(0).commission_rate
+                var commission = Math.floor(total*commission_rate/100)
+                console.log(commission)
                 tx.executeSql("INSERT INTO ships(user_id,company_id,company_name,ship_date,product_id,product_name,"+
-                "product_type,unit,weight,total,pay_total,remarks) values (?,?,?,?,?,?,?,?,?,?,?,?)",
-                                           [user_id,company_id,company_name, ship_date, product_id,product_name,product_type,unit,weight,total,0,remarks]);
+                "product_type,unit,weight,total,pay_total,commission,remarks) values (?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                [user_id,company_id,company_name, ship_date, product_id,product_name,product_type,unit,weight,total,0,commission,remarks]);
+
                 msg = '<p>供货记录添加成功！</p>';
                 document.querySelector('#msg').innerHTML =  msg;
                 window.location.href="ship.html";
@@ -46,12 +49,11 @@ function addShip(){
 function updateShip(ship_id){
     var ship_date = document.getElementById('new_shipDate').value;
     var weight = document.getElementById('new_weight').value;
-    var total = document.getElementById('new_total').value;
     var pay_total = document.getElementById('new_pay_total').value;
     var remarks = document.getElementById('new_remarks').value;
-    sql = "update ships set ship_date=?,weight=?,total=?,pay_total=?,remarks=? where id=?"
+    sql = "update ships set ship_date=?,weight=?,pay_total=?,remarks=? where id=?"
     db.transaction(function (tx) {
-        tx.executeSql(sql,[ship_date,weight,total,pay_total,remarks,ship_id]);
+        tx.executeSql(sql,[ship_date,weight,pay_total,remarks,ship_id]);
         msg = '<p>供货记录修改成功！</p>';
         document.querySelector('#msg').innerHTML =  msg;
         window.location.href="ship.html";
@@ -201,7 +203,8 @@ function exportShip(fileName){
     var endDate = document.getElementById('endDate').value;
     var isPay = document.getElementById('isPay').value;
     var searchCompany = document.getElementById('searchCompany').value;
-    sql = getSearchShipsSql(startDate,endDate,isPay,searchCompany);
+    var searchProduct = document.getElementById('searchProduct').value
+    sql = getSearchShipsSql(startDate,endDate,isPay,searchCompany,searchProduct);
     user_id = sessionStorage.getItem('user_id')
     db.transaction(function (tx) {
       tx.executeSql(sql, [user_id], function (tx, results) {
@@ -216,6 +219,7 @@ function exportShip(fileName){
                             "<td>总价</td>" +
                             "<td>已支付金额</td>" +
                             "<td>未支付金额</td>" +
+                            "<td>提成预估</td>" +
                             "<td>备注</td>" +
                         "</tr>"
           for(i=0;i<len;i++){
@@ -227,11 +231,11 @@ function exportShip(fileName){
               var weight = results.rows.item(i).weight
               var total = results.rows.item(i).total
               var pay_total = results.rows.item(i).pay_total
+              var commission = results.rows.item(i).commission
               var remarks = results.rows.item(i).remarks
-              table = table + exportTable(company_name,ship_date,product_name,product_type,weight,total,pay_total,remarks)
+              table = table + exportShipTable(company_name,ship_date,product_name,product_type,weight,total,pay_total,commission,remarks)
           };
           table = table + '<tr><td>时间</td><td>'+(startDate==""?'-':startDate)+'至'+(endDate==""?'-':endDate)+'</td></tr></table>';
-          console.log(table)
           document.querySelector('#export').innerHTML =  table;
           downloadExcel("exportTable",fileName)
           document.getElementById('exportTable').remove();
@@ -240,7 +244,7 @@ function exportShip(fileName){
     });
 };
 
-function exportTable(company_name,ship_date,product_name,product_type,weight,total,pay_total,remarks){
+function exportShipTable(company_name,ship_date,product_name,product_type,weight,total,pay_total,commission,remarks){
     remaining = total - pay_total
     table = "<tr>" +
                 "<td>{0}</td>" +
@@ -252,7 +256,8 @@ function exportTable(company_name,ship_date,product_name,product_type,weight,tot
                 "<td>{6}</td>" +
                 "<td>{7}</td>" +
                 "<td>{8}</td>" +
+                "<td>{9}</td>" +
             "</tr>"
-    table = table.replaceValue(company_name,ship_date,product_name,product_type,weight,total,pay_total,remaining,remarks)
+    table = table.replaceValue(company_name,ship_date,product_name,product_type,weight,total,pay_total,remaining,commission,remarks)
     return table
 }

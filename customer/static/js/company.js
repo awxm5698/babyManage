@@ -166,7 +166,7 @@ function exportCompany(fileName){
               var contacts = results.rows.item(i).contacts
               var phone = results.rows.item(i).phone
               var remarks = results.rows.item(i).remarks
-              table = table + exportTable(company,address,contacts,phone,remarks)
+              table = table + exportCompanyTable(company,address,contacts,phone,remarks)
           };
           table = table + "</table>";
           document.querySelector('#export').innerHTML =  table;
@@ -177,7 +177,7 @@ function exportCompany(fileName){
     });
 };
 
-function exportTable(company,address,contacts,phone,remarks){
+function exportCompanyTable(company,address,contacts,phone,remarks){
     table = "<tr>" +
                 "<td>{0}</td>" +
                 "<td>{1}</td>" +

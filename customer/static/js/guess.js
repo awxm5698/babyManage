@@ -1,9 +1,26 @@
+function clickGuess(){
+    guessText = document.getElementById('guessText').value
+    console.log(guessText)
+    shipsGuess(guessText);
+    $(".modal").modal('hide');
+};
 
-function shipsGuess(){
+
+function getGuessSql(guessText){
+    if(guessText==""){
+        sql = "SELECT * FROM ships WHERE user_id=? order by id desc"
+    }
+    else{
+        sql = "SELECT * FROM ships WHERE user_id=? and company_name like '%"+guessText+"%' order by id desc"
+    }
+    return sql
+};
+
+function shipsGuess(guessText=""){
     db.transaction(function (tx) {
         user_id = sessionStorage.getItem('user_id')
-        tx.executeSql('SELECT * FROM ships WHERE user_id=? order by id desc',
-        [user_id], function (tx, results) {
+        sql = getGuessSql(guessText)
+        tx.executeSql(sql,[user_id], function (tx, results) {
             var len = results.rows.length, i;
             if(len < 2)
             {
@@ -21,25 +38,30 @@ function shipsGuess(){
                 };
                 var x=company_list.length
                 table = ''
-                for(i=0;i<x;i++){
-                    company = company_list[i]
-                    tx.executeSql('SELECT * FROM ships WHERE company_id=? and user_id=? order by id desc',
-                    [company,user_id], function (tx, new_results) {
-                        var new_len = new_results.rows.length, i;
-                        var product_list=new Array();
-                        for(j=0;j<new_len;j++){
-                            product_id = new_results.rows.item(j).product_id
-                            if(product_list.indexOf(product_id) == -1){
-                                product_list.push(product_id);
-                            };
-                        };
-                        var y = product_list.length
-                        for(k=0;k<y;k++){
-                            guessNextDay(company,product_list[k])
-                        };
-                    });
+                for(k=0;k<x;k++){
+                    company = company_list[k]
+                    guessCompany(company)
 
-                };
+                    };
+            };
+        });
+    });
+};
+
+function guessCompany(company){
+    var product_list = new Array();
+    var user_id = sessionStorage.getItem('user_id')
+    db.transaction(function (tx) {
+        tx.executeSql('SELECT * FROM ships WHERE company_id=? and user_id=? order by id desc',
+        [company,user_id], function (tx, new_results) {
+            var new_len = new_results.rows.length, j;
+
+            for(j=0;j<new_len;j++){
+                product_id = new_results.rows.item(j).product_id
+                if(product_list.indexOf(product_id) == -1){
+                product_list.push(product_id)
+                guessNextDay(company,product_id)
+                }
             };
         });
     });
@@ -83,7 +105,7 @@ function guessNextDay(company_id,product_id){
                 var daysAdd = Math.floor(results.rows.item(0).weight/daysNeeded);
                 var nextDay = dateAdd(results.rows.item(0).ship_date,daysAdd);
             }
-            catch{
+            catch (e) {
                 nextDay = '供货次数太少，无法预测'
             }finally{
                 var company_name = results.rows.item(0).company_name;

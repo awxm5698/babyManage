@@ -6,6 +6,7 @@ function addProduct(){
     var price = document.getElementById('price').value;
     var rate = document.getElementById('rate').value;
     var remarks = document.getElementById('remarks').value;
+    rate = rate!=""?rate:0
     user_id = sessionStorage.getItem('user_id')
     if(productName!='' && productType!=''){
         db.transaction(function (tx) {
@@ -142,6 +143,7 @@ function updateProduct(product_id){
     var price = document.getElementById('new_price').value;
     var rate = document.getElementById('new_rate').value;
     var remarks = document.getElementById('new_remarks').value;
+    rate = rate!=""?rate:0
     sql = "UPDATE product set product_name=?,product_type=?,unit=?,unit_price=?,commission_rate=?,remarks=? where id=?"
     console.log(sql)
     db.transaction(function (tx) {
@@ -176,7 +178,7 @@ function exportProduct(fileName){
               var unit_price = results.rows.item(i).unit_price
               var commission_rate = results.rows.item(i).commission_rate
               var remarks = results.rows.item(i).remarks
-              table = table + exportTable(product_name,product_type,unit,unit_price,commission_rate,remarks)
+              table = table + exportProductTable(product_name,product_type,unit,unit_price,commission_rate,remarks)
           };
           table = table + "</table>";
           document.querySelector('#export').innerHTML =  table;
@@ -187,7 +189,7 @@ function exportProduct(fileName){
     });
 };
 
-function exportTable(product_name,product_type,unit,unit_price,commission_rate,remarks){
+function exportProductTable(product_name,product_type,unit,unit_price,commission_rate,remarks){
     table = "<tr>" +
                 "<td>{0}</td>" +
                 "<td>{1}</td>" +

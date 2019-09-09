@@ -49,7 +49,7 @@ $('#uploadCompany').change(function(e) {
 function startUploadCompany(){
     try{
     importValue = document.getElementById('importValue').value;
-    }catch{
+    }catch (e) {
         alert('请先选择文件')
     }
     values = importValue.split(';')
@@ -125,7 +125,7 @@ $('#uploadShip').change(function(e) {
 function startUploadShip(){
     try{
         importValue = document.getElementById('importValue').value;
-    }catch{
+    }catch (e) {
         alert('请先选择文件')
     }
     values = importValue.split(';')
@@ -206,7 +206,7 @@ $('#uploadProduct').change(function(e) {
 function startUploadProduct(){
     try{
         importValue = document.getElementById('importValue').value;
-    }catch{
+    }catch (e) {
         alert('请先选择文件')
     }
     values = importValue.split(';')
