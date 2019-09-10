@@ -35,6 +35,7 @@ function signIn(){
             var len = results.rows.length, i;
             if(len == '1')
             {
+                savePassword();
                 msg = '<p>登录成功！</p>';
                 sessionStorage.setItem('user_id',results.rows.item(0).id)
                 sessionStorage.setItem('user_name',results.rows.item(0).user_name)
@@ -56,3 +57,19 @@ function signOut(){
     window.location.href="../main.html";
 };
 
+function savePassword()
+    {
+        var username = $("#username").val();
+        localStorage.username =  username;
+        if(document.getElementById("savePassword").checked)
+        {
+            var password = $("#password").val();
+            localStorage.password = password;
+            localStorage.checked = true;
+        }
+        else
+        {
+            localStorage.removeItem("password");
+            localStorage.checked = false;
+        }
+    }
